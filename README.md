@@ -1,2 +1,5 @@
-# aws-media-services-simple-vod-workflow
-Reference arhcitecure for a full end to end workflow, from encoder to play-out, for VOD on AWS
+AWS Media Services Simple Vod Workflow
+
+## License
+
+This library is licensed under the Apache 2.0 License. 
