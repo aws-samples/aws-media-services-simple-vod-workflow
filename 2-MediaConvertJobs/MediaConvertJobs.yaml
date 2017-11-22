@@ -1,0 +1,63 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description:
+  Creates a bucket to store inputs and outputs for MediaConvert and a role to 
+  pass to MediaConvert to access the bucket and other account resources 
+  MediaConvert needs to process jobs from the console and API.  For the lab, 
+  the bucket is website enabled so that output videos can play out as web resources.
+
+Parameters:
+  MediaBucket:
+    Type: String
+    Description: 
+      The name for the bucket you want to use for MediaConvert 
+      inputs and ouputs, e.g. 'vod-yourname.' 
+
+Resources:
+
+  MediaBucket:
+    Properties:
+      BucketName: 
+        !Join
+          - '-'
+          - - !Ref MediaBucketName
+            - !Ref 'AWS::AccountId'
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders: ['*']
+          AllowedMethods: [GET]
+          AllowedOrigins: ['*']
+          ExposedHeaders: [Date]
+          Id: myCORSRuleId1
+          MaxAge: '3600'
+      LifecycleConfiguration:
+        Rules:
+        - Id: ExpireRule
+          Status: Enabled
+          ExpirationInDays: '2'
+    DeletionPolicy: Retain
+    Type: "AWS::S3::Bucket"
+
+  MediaBucketPolicy:
+    Properties:
+      Bucket: !Ref MediaBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal: "*"
+            Action: s3:GetObject
+            Resource: !Sub "arn:aws:s3:::${MediaBucket}/*"
+    Type: "AWS::S3::BucketPolicy"
+
+Outputs:
+  MediaBucket:
+    Value: !Ref MediaBucket 
+  WebsiteURL:
+    Value: !Join ['', ['https://', !GetAtt [MediaBucket, DomainName]]]
+    Description: Name of S3 bucket to hold website content
+  

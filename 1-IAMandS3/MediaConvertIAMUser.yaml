@@ -1,0 +1,48 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description:
+  Creates IAM user permissions needed to complete the VOD 
+  MediaConvert Workshop.  S3 permissions are full access in
+  this sample, but can be restricted to only the input/output 
+  buckets, if desired.
+
+Resources:
+
+  MediaConvertUserPolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties: 
+      ManagedPolicyName: !Sub "${AWS::StackName}-MediaConvertUsersPolicy"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Effect: "Allow"
+            Action: 
+              - "mediaconvert:*"
+            Resource: "arn:aws:mediaconvert:*" 
+          -
+            Effect: "Allow"
+            Action: 
+              - "iam:ListRoles"
+              - "iam:PassRole"
+            Resource: "arn:aws:iam::*"
+          -
+            Effect: "Allow"
+            Action: 
+              - "s3:*"
+            Resource: "*" 
+          -
+            Effect: "Allow"
+            Action: 
+              - cloudformation:Describe*
+              - cloudformation:EstimateTemplateCost
+              - cloudformation:Get*
+              - cloudformation:List*
+              - cloudformation:ValidateTemplate
+            Resource: "*"
+
+Outputs:
+  MediaConvertUserPolicyArn:
+    Value: !Ref MediaConvertUserPolicy
+        
