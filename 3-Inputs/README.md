@@ -91,7 +91,7 @@ You should be able to view thumbnail JPEG files using your browser.
 
 The HLS, MP4 and Thumbnail outputs should be modified to play the first 30 seconds of the VANLIFE video, followed by a 21 second clip of aerial footage of some sea stacks.
 
-![module 3 fin](../images/module-3-job-fin.png)
+![module 3 fin](../images/module-3-job-fin-Q.png)
 
 ## Completion
 

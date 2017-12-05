@@ -127,7 +127,7 @@ In this module, you will create a MediaConvert job that take a single input vide
 1. Select **No container** from the **Container** dropdown.
 1. Scroll down to the **Stream settings** panel.
 1. Select **Frame Capture to JPEG** from the **Video codec** dropdown.
-1. Enter `1080` and `720` in the **Resolution (wxh)** boxes.
+1. Enter `1280` and `720` in the **Resolution (wxh)** boxes.
 1. Enter `500` in the **Max captures** box.
     
     ![Frame capture to JPEG image](../images/mediaconvert-frame-capture.png)

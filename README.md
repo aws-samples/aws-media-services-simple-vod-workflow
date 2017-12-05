@@ -10,7 +10,29 @@ The workshop is broken up into multiple modules. Prerequisites for each module a
 
 In order to complete this workshop you'll need an AWS Account with access to create AWS MediaConvert, IAM, S3, and Lambda resources. The code and instructions in this workshop assume only one student is using a given AWS account at a time. If you try sharing an account with another student, you'll run into naming conflicts for certain resources. You can work around these by appending a unique suffix to the resources that fail to create due to conflicts, but the instructions do not provide details on the changes required to make this work.
 
-All of the resources you will launch as part of this workshop are eligible for the AWS free tier if your account is less than 12 months old. See the [AWS Free Tier page](https://aws.amazon.com/free/) for more details.
+### Billing
+
+MediaConvert jobs will incur charges based on the region you are using for the workshop at the rates described in the MediaConvert pricing page: https://aws.amazon.com/mediaconvert/pricing/ .
+
+**Each MediaConvert job from this lab produces outputs with the following characteristics:**
+
+ABR stack 
+* 3 outputs: 1280x720, 960x540, 680x360
+
+MP4
+* 1 output: 1280x720
+
+Thumbnails
+* 1 output: 1280x720
+
+All ouputs:
+* MPEG-2 Codec
+* 30 - 60 FPS
+* 1.5 - 2 minutes long depending on which job in the lab you are running.
+
+**Other lab resources**
+
+S3 and other resources you will launch as part of this workshop are eligible for the AWS free tier if your account is less than 12 months old. See the [AWS Free Tier page](https://aws.amazon.com/free/) for more details.
 
 ### Browser
 
@@ -47,5 +69,16 @@ You will need to download this project to your computer in order to create the b
 
 Move forward to the first module for [**AWS IAM and S3**](1-IAMandS3/README.md).
 
+# Credits
 
+_Sea Waves Sound_ in TRAILER.mp4 recorded by Mike Koenig.  Licensed under the Creative Commons Attribution 3.0 license.  
 
+Captions text in CAPTIONS_en.srt and CAPTIONS_ru.srt © copyright Blender Foundation | www.sintel.org.  Licenced under the Creative Commons Attribution 3.0 license.
+
+# Contributors
+
+Alex Burkleaux
+
+Eddie Goynes
+
+Jeremy Johnson

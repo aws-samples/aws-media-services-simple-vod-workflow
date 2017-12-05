@@ -80,7 +80,7 @@ Resources:
         Rules:
         - Id: ExpireRule
           Status: Enabled
-          ExpirationInDays: '2'
+          ExpirationInDays: '7'
     DeletionPolicy: Retain
     Type: "AWS::S3::Bucket"
 
