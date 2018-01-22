@@ -114,6 +114,7 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
       "Action": "sts:AssumeRole"
     }
   ]
+}
 ```
 
 1. Click on **Update Trust policy** to save the policy
