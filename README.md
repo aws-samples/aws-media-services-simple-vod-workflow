@@ -63,7 +63,8 @@ You will need to download this project to your computer in order to create the b
 
 - [**Working with Captions**](5-Captions/README.md) - This module guides the participant in creating media assets with burned in caption generated from a side-car captions file.  
 
-- [**Working with Embedded Input Metadata**](5-EmbeddedMetadata/README.md) - This module guides the participant in creating media assets that contain metadata embedded in the input video package.  The participant will learn about different kinds of metadata and how the metadata can be combined with video and audio data.  They will create a video that contains multi-language captions and audio as well as a video with ad blanking on SCTE35 ad markers.
+
+- [**Automating Jobs with Lambda and S3 Event Triggers**](7-MediaConvertJobLambda/README.md) - This module guides the participant in creating an automated "watchfolder" workflow.  Video files added to an S3 bucket automatically trigger a MediaConvert job to run on the uploaded files.
 
 # Start the Workshop
 

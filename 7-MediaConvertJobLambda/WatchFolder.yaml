@@ -11,9 +11,6 @@ Parameters:
   MediaConvertRoleArn:
     Type: String
     Description: The ARN for the role previously to pass to MediaConvert so it can access to resources in your account  
-  MediaConvertEndpoint:
-    Type: String
-    Description: The endpoint from the https://mediaconvert.aws.amazon.com/account page
 
 Mappings:
   SourceCode:
@@ -101,7 +98,6 @@ Resources:
       Environment:
         Variables:
           DestinationBucket: !Ref MediaBucket
-          MediaConvertEndpoint: !Ref MediaConvertEndpoint
           MediaConvertRole: !Ref MediaConvertRoleArn
       Runtime:  python2.7
       Timeout: 120

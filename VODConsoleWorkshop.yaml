@@ -4,11 +4,6 @@ AWSTemplateFormatVersion: "2010-09-09"
 Description:
   Creates a static website and backend AWS services for the AWS Elemental Media Services VOD workshop
 
-Parameters:
-  MediaConvertEndpoint:
-    Type: String
-    Description: The endpoint from the https://mediaconvert.aws.amazon.com/emf/home?region=us-east-1#/account page
-
 Resources:
 
   MediaConvertIAMandS3:
@@ -24,7 +19,6 @@ Resources:
       Parameters:
       Parameters:
         MediaBucket: !GetAtt MediaConvertIAMandS3.Outputs.MediaBucket
-        MediaConvertEndpoint: !Ref MediaConvertEndpoint
         MediaConvertRoleArn: !GetAtt MediaConvertIAMandS3.Outputs.MediaConvertRoleArn
       TemplateURL: https://s3.amazonaws.com/rodeolabz-us-west-2/vodconsole/cf/WatchFolder.yaml
       TimeoutInMinutes: 60
