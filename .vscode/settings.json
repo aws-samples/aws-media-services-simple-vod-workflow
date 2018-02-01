@@ -1,0 +1,3 @@
+{
+    "python.pythonPath": "${workspaceFolder}/mediaconvert/bin/python"
+}

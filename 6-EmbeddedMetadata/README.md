@@ -26,7 +26,7 @@ Create a duplicate of the job you created in the last module.  Modify the job to
 
 #### Duplicate the job from the previous module
 
-1. Open the MediaConvert console for the region you are completing the lab in (US-West-Oregon). https://mediaconvert-console-ext-us-west-2.aws.amazon.com/mediaconvert/home?#/welcome
+1. Open the MediaConvert console for the region you are completing the lab in (US-West-Oregon). https://us-west-2.console.aws.amazon.com/mediaconvert/home?region=us-west-2#/welcome
 1. Select **Jobs** from the side bar menu. 
 1. Find the job  you created in the last module and click on the Job Id link to open the **Job details** page.
 1. Select **Duplicate**
@@ -72,6 +72,10 @@ You can play the HLS using:
 The MP4, HLS and Thumbnails will have one 10 second Ad marker slate image inserted starting 6 seconds into the video.
 
 ![module 6](../images/module-6-fin.png)
+
 ## Completion
 
-Congratulations!  You finished the lab! Hopefully, you learned something new about video conversion use cases and workflows using AWS Elemental MediaConvert service. 
+In this module you learned about embedded metadata in file based video conversion workflows.  In the next module, you will switch gears from the functionality of mediaconvert and focus on automation by creating a lambda function that starts a new MediaConvert job whenever a new file is written to an S3 bucket.
+
+Next module: [**Automating Jobs with Lambda**](../7-MediaConvertJobLambda/README.md)
+ 

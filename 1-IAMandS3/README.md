@@ -37,7 +37,7 @@ The signed-in user must have the AdministratorAccess policy or a policy that all
 
 The code and instructions in this workshop assume only one student is using a given AWS account at a time. If you try sharing an account with another student, you'll run into naming conflicts for certain resources. You can work around this by either using a suffix in your resource names or using distinct Regions, but the instructions do not provide details on the changes required to make this work.
 
-### Skip ahead with CloudFormation
+### Option 1: Skip ahead with CloudFormation
 
 If you would like to skip this part of the lab and move on the the next module, you can run the CloudFormation provided with this project.
 
@@ -60,7 +60,7 @@ If you would like to skip this part of the lab and move on the the next module, 
 
 Move forward to the next module  [**AWS Elemental Media Convert Jobs**](../2-MediaConvertJobs/README.md).
 
-### Create a IAM Role to Use with AWS Elemental MediaConvert
+### Option 2: Create a IAM Role to Use with AWS Elemental MediaConvert
 
 MediaConvert will will need to be granted permissions to read and write files from your S3 buckets and generate CloudWatch events as it processes videos.  MediaConvert is granted the permissions it needs by assuming a role that is passed to it when you create a job.
 
@@ -74,11 +74,9 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
 
 1. Select **Roles** in the left navigation bar and then choose **Create new role**.
 
-1. Select **AWS Service** and **Lambda** for the role type, then click on the **Next:Permissions** button.
+1. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
 
     **Note:** Selecting a role type automatically creates a trust policy for your role that allows AWS services to assume this role on your behalf. If you were creating this role using the CLI, AWS CloudFormation or another mechanism, you would specify a trust policy directly.
-
-    **Note:** MediaConvert is a new service and isn't listed in IAM at this time.  We will select Lambda as the role type and then modify the trust policy to add the MediaConvert service. **FIXME**
 
 1. Choose **Next:Review**.
 
@@ -114,17 +112,13 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
       "Action": "sts:AssumeRole"
     }
   ]
+}
 ```
 
 1. Click on **Update Trust policy** to save the policy
 
-1. On the Permissions tab, click on the **Inline Policies** section and choose the **click here** link to create a new inline policy.
-
-   ![Inline policies screenshot](../images/inline-policies.png)
-
-1. Click on the **Custom Policy** radio button and then click on **Select**
-1. On the Review Policy page, enter `vod-MediaConvertPolicy` in the policy name box.
-
+1. On the Permissions tab, click on the **Add Inline Policies** link to create a new inline policy.
+1. On the **Create Policy** page, click on the **JSON** tab 
 1. Copy and paste the following JSON into the **Policy Document** box:
 
 ```
@@ -154,13 +148,16 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
     ]
 }
 ```
+1. Select the **Review Policy** button at the bottom of the page.
+1. On the Review Policy page, enter `vod-MediaConvertPolicy` in the policy name box.
 
-1. Click on **Apply Policy** to add the policy.
-1. Scroll to the top of the page for your new policy and note the **ARN**. You will use this in the following modules.
+
+1. Click on **Create Policy** to add the policy.
+1. Scroll to the top of the page for your new Role and note the **ARN**. You will use this in the following modules.
 
 ## 2. Create an S3 bucket to store and host MediaConvert outputs
 
-### No previous account configuration
+### Option1: No previous account configuration
 
 In this section, you will use the AWS console to create an S3 bucket to store video and image outputs from MediaConvert and host a simple web page that can be used to play out the videos.  Later, the resulting videos and images will be played out using the S3 https resource using several different players both inside and outside of the the amazonaws domain.  
 
@@ -181,11 +178,9 @@ In order to facilitate https access from anonymous sources inside and outside th
 
 1. Choose **Create** in the lower left of the dialog without selecting a bucket to copy settings from.
 
-    ![Create bucket screenshot](../images/create-bucket.png)
-
 1. From the S3 console select the bucket you just created and go to the Overview page.
 1. Select the **Properties** tab and click on the **Static website hosting** tile.  
-1. Select the **Use this bucketto host a website** box.
+1. Select the **Use this bucket to host a website** box.
 1. Enter `index.html` in the **Index document** box.
 1. Select **Save**.
 1. Select the **Permissions** tab.

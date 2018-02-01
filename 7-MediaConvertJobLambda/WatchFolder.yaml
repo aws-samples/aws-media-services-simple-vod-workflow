@@ -1,0 +1,113 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description:
+  Creates an S3 watchfolder and automated video conversion workflow the VODonline website 
+
+Parameters:
+  MediaBucket:
+    Type: String
+    Description: The name for the bucket to store outputs, e.g. 'vod-yourname.' 
+  MediaConvertRoleArn:
+    Type: String
+    Description: The ARN for the role previously to pass to MediaConvert so it can access to resources in your account  
+  MediaConvertEndpoint:
+    Type: String
+    Description: The endpoint from the https://mediaconvert.aws.amazon.com/account page
+
+Mappings:
+  SourceCode:
+    General:
+      S3Bucket: "rodeolabz"
+      KeyPrefix: "vodconsole"
+
+Resources:
+    
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-LambdaRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          -
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        -
+          PolicyName: !Sub "${AWS::StackName}-LambdaPolicy"
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              -
+                Sid: Logging
+                Effect: Allow
+                Action:
+                  - "logs:CreateLogGroup"
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Resource: "*"
+              - 
+                Sid: PassRole
+                Effect: Allow
+                Action:
+                  - iam:PassRole
+                Resource:
+                  - !Ref MediaConvertRoleArn
+              - Sid: MediaConvertService
+                Effect: Allow
+                Action:
+                  - "mediaconvert:*"
+                Resource: 
+                  - "*"
+  
+  S3InvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt LambdaConvert.Arn
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+ 
+  WatchFolder:
+    Type: AWS::S3::Bucket
+    Properties:
+      LifecycleConfiguration:
+        Rules:
+        - Id: ExpireRule
+          Status: Enabled
+          ExpirationInDays: '7'
+      NotificationConfiguration:
+        LambdaConfigurations:
+          -
+            Function: !GetAtt LambdaConvert.Arn
+            Event: "s3:ObjectCreated:*"
+    DeletionPolicy: Retain
+
+  LambdaConvert:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-convert
+      Description: Converts input video  
+      Handler: convert.handler
+      Role: !GetAtt LambdaRole.Arn
+      Code:
+        S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], !Ref "AWS::Region"]]
+        S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "lambda.zip"]]
+      Environment:
+        Variables:
+          DestinationBucket: !Ref MediaBucket
+          MediaConvertEndpoint: !Ref MediaConvertEndpoint
+          MediaConvertRole: !Ref MediaConvertRoleArn
+      Runtime:  python2.7
+      Timeout: 120
+
+Outputs:
+  WatchFolderBucket:
+    Value: !Ref WatchFolder      
+  LambdaRoleArn:
+    Value: !GetAtt LambdaRole.Arn

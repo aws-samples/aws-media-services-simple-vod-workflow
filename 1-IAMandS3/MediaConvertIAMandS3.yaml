@@ -102,4 +102,6 @@ Outputs:
     Value: !Ref MediaBucket 
   MediaConvertRole: 
     Value: !Ref MediaConvertRole
+  MediaConvertRoleArn:
+    Value: !GetAtt MediaConvertRole.Arn
         

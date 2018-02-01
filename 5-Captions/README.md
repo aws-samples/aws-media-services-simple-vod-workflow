@@ -30,7 +30,7 @@ If you used CloudFormation to configure resources, you will find the values name
 
 #### Duplicate the job from the previous module
 
-1. Open the MediaConvert console for the region you are completing the lab in (US-West-Oregon). https://mediaconvert-console-ext-us-west-2.aws.amazon.com/mediaconvert/home?#/welcome
+1. Open the MediaConvert console for the region you are completing the lab in (US-West-Oregon). https://us-west-2.console.aws.amazon.com/mediaconvert/home?region=us-west-2#/welcome
 1. Select **Jobs** from the side bar menu. 
 1. Find the job  you created in the last module and click on the Job Id link to open the **Job details** page.
 1. Select **Duplicate**
