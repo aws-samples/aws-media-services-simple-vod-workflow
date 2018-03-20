@@ -16,7 +16,7 @@ Converted outputs will be saved in the S3 MediaBucket created in earlier in the 
 
 Each of the following sections provide an implementation overview and detailed, step-by-step instructions. The overview should provide enough context for you to complete the implementation if you're already familiar with the AWS Management Console or you want to explore the services yourself without following a walkthrough.
 
-A cloudformation template is provided for this module in the file `WatchFolder.yaml`, if you would prefer to build the automated workflow automatically.
+A CloudFormation template is provided for this module in the file `WatchFolder.yaml`, if you would prefer to build the automated workflow automatically. **Note:** Run the CloudFormation template in us-west-2.
 
 ### 1. Create an Amazon S3 bucket to use for uploading videos to be converted
 
