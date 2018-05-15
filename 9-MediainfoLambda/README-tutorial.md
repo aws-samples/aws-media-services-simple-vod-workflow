@@ -2,7 +2,7 @@
 
 In this module you'll use Cloudwatch and Lambda to automatically collect metadata about the input video of a MediaConvert job using mediainfo.  
 
-This tutorial is based off the AWS blob post [Extracting Video Metadata using Lambda and Mediainfo](https://aws.amazon.com/blogs/compute/extracting-video-metadata-using-lambda-and-mediainfo/)
+This tutorial is based off the AWS blog post [Extracting Video Metadata using Lambda and Mediainfo](https://aws.amazon.com/blogs/compute/extracting-video-metadata-using-lambda-and-mediainfo/)
 
 ![Serverless event architecture](../images/mediainfo.png)
 
@@ -10,7 +10,7 @@ You'll implement a Lambda function that will be invoked each time a MediaConvert
 
 ## Prerequisites
 
-1. You need the ability to create MediaConvert jobs for triggering the automation.  Jobs can be created from the console or you could use the watchfolder workflow from this respository [1A-MediaConvert-watchfolder/WatchFolder.yaml](../0A-MediaConvert-IAM/WatchFolder.yaml).  
+1. You need the ability to create MediaConvert jobs for triggering the automation.  Jobs can be created from the console or you could use the watchfolder workflow from this this folder: [Workflow-WatchfolderAndNotification](./Workflow-WatchfolderAndNotification/README.md).  
 
 ## Implementation Instructions
 
