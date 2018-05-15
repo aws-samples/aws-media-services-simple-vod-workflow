@@ -200,7 +200,7 @@ Option 2 - create your own lambda package
     ],
     "detail": {
       "timestamp": 1525799133520,
-      "accountId": "526662735483",
+      "accountId": "123456789",
       "queue": "arn:aws:mediaconvert:us-east-1:123456789:queues/Default",
       "jobId": "1525799045060-9vh36h",
       "status": "INPUT_INFORMATION",
