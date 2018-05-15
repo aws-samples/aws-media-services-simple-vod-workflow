@@ -526,9 +526,85 @@ When the VODNotifyEventRule matches a COMPLETE or ERROR event from MediaConvert,
 #### Step-by-step instructions
 
 1. Open the SNS console.
+
 2. Find the policy you created earlier, VODNotification, and click on the link to go to the detail page.
+
 3. Select `Edit topic policy` on the **Other topic actions** drop-down menu.
-4. Check the radio button **Everyone** under **Allow these users to publish messages to this topic**
+
+4. On the **Advanced view** tab, edit the policy JSON by adding the following statement.  
+    1. You will need to add a commma character (',')  Replace the ARN with the ARN for this Topic.
+        1. Add the statement to the begining of the list object.  Right after the line that says **"Statement": [**.
+
+    ```
+    {
+      "Sid": "TrustCWEToPublishEventsToMyTopic",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "events.amazonaws.com"
+      },
+      "Action": "sns:Publish",
+      "Resource": "ARN"
+    },
+    ```
+4. Click on **Update policy**
+
+5. The new policy should look like this:
+
+    ```
+    {
+    "Version": "2008-10-17",
+    "Id": "__default_policy_ID",
+    "Statement": [
+        {
+        "Sid": "TrustCWEToPublishEventsToMyTopic",
+        "Effect": "Allow",
+        "Principal": {
+            "Service": "events.amazonaws.com"
+        },
+        "Action": "sns:Publish",
+        "Resource": "ARN"
+        },
+        {
+        "Sid": "__default_statement_ID",
+        "Effect": "Allow",
+        "Principal": {
+            "AWS": "*"
+        },
+        "Action": [
+            "SNS:Publish",
+            "SNS:RemovePermission",
+            "SNS:SetTopicAttributes",
+            "SNS:DeleteTopic",
+            "SNS:ListSubscriptionsByTopic",
+            "SNS:GetTopicAttributes",
+            "SNS:Receive",
+            "SNS:AddPermission",
+            "SNS:Subscribe"
+        ],
+        "Resource": "arn:aws:sns:us-west-2:ACCOUNT:vod-notification",
+        "Condition": {
+            "StringEquals": {
+            "AWS:SourceOwner": "ACCOUNT"
+            }
+        }
+        },
+        {
+        "Sid": "__console_sub_0",
+        "Effect": "Allow",
+        "Principal": {
+            "AWS": "*"
+        },
+        "Action": [
+            "SNS:Subscribe",
+            "SNS:Receive"
+        ],
+        "Resource": "arn:aws:sns:us-west-2:ACCOUNT:vod-notification"
+        }
+        
+    ]
+    }
+    ```
+
 
 ## Test notifications
 
