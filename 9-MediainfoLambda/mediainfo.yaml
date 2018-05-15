@@ -1,0 +1,228 @@
+Parameters:
+
+  MediainfoTableTTL:
+    Description: The amount of time in days that current job mediainfo data is cached in Dynamodb tables
+    Type: Number
+    Default: 1
+
+
+Mappings:
+  SourceCode:
+    General:
+      S3Bucket: "rodeolabz"
+      KeyPrefix: "vodtk/1c-mediaconvert-mediainfo"
+
+Resources:
+
+  MediainfoTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: !Sub "${AWS::StackName}-MediainfoTable"
+      AttributeDefinitions: 
+        - 
+          AttributeName: jobId
+          AttributeType: S
+        -
+          AttributeName: timestamp
+          AttributeType: N 
+      KeySchema: 
+        - 
+          AttributeName: jobId
+          KeyType: HASH
+        -
+          AttributeName: timestamp
+          KeyType: RANGE
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TimeToLiveSpecification:
+        AttributeName: timestampTTL
+        Enabled: true
+  
+  MediainfoLambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-MediainfoLambdaRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - 
+          PolicyName: !Sub "${AWS::StackName}-MediainfoLambdaPolicy"
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: 
+                  - !Join ["", ["arn:aws:logs:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":log-group:/aws/lambda/*"]]
+              -
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource:
+                  - !Join ["", ["arn:aws:dynamodb:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":table/",Ref: "MediainfoTable"]]   
+        - 
+          PolicyName: !Sub "${AWS::StackName}-EventLambdaMediainfoPolicy"  
+          PolicyDocument:
+            Statement: 
+              - Effect: Allow
+                Action: 
+                  - s3:GetObjectVersionTorrent
+                  - s3:GetObjectAcl
+                  - s3:GetObject
+                  - s3:GetObjectTorrent
+                  - s3:GetObjectVersionTagging
+                  - s3:GetObjectVersionAcl
+                  - s3:GetObjectTagging
+                  - s3:GetObjectVersionForReplication
+                  - s3:GetObjectVersion
+                  - s3:ListMultipartUploadParts
+                Resource: "arn:aws:s3:::*/*"
+              - Effect: Allow
+                Action: 
+                  - s3:ListBucketByTags
+                  - s3:GetLifecycleConfiguration
+                  - s3:ListBucketMultipartUploads
+                  - s3:GetBucketTagging
+                  - s3:GetInventoryConfiguration
+                  - s3:GetBucketWebsite
+                  - s3:ListBucketVersions
+                  - s3:GetBucketLogging
+                  - s3:ListBucket
+                  - s3:GetAccelerateConfiguration
+                  - s3:GetBucketVersioning
+                  - s3:GetBucketAcl
+                  - s3:GetBucketNotification
+                  - s3:GetBucketPolicy
+                  - s3:GetReplicationConfiguration
+                  - s3:GetBucketRequestPayment
+                  - s3:GetBucketCORS
+                  - s3:GetAnalyticsConfiguration
+                  - s3:GetMetricsConfiguration
+                  - s3:GetBucketLocation
+                  - s3:GetIpConfiguration
+                Resource: "arn:aws:s3:::*"
+              - Effect: Allow
+                Action: 
+                  - s3:ListAllMyBuckets
+                  - s3:HeadBucket
+                  - s3:ListObjects
+                Resource: "*"
+
+  EventInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt MediainfoCollectorLambda.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        Fn::GetAtt:
+          - "InputMediaConvertEventRule"
+          - "Arn"              
+
+  InputMediaConvertEventRule:
+    Type: "AWS::Events::Rule"
+    Properties: 
+      Description: catches MediaConvert Events
+      State: "ENABLED"
+      EventPattern: 
+        source: 
+          - "aws.mediaconvert" 
+        detail-type:
+          - "MediaConvert Job State Change"
+        detail:
+          status:
+            - "INPUT_INFORMATION"
+      Targets:
+        -
+          Arn: 
+            Fn::GetAtt:
+              - "MediainfoCollectorLambda"
+              - "Arn"
+          Id: "TargetMediainfoCollectorLambda"
+
+  MediainfoCollectorLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-EventCollector
+      Description: Collect events, update status, make metrics 
+      Handler: mediainfo.lambda_handler
+      Role: !GetAtt MediainfoLambdaRole.Arn
+      Code:
+        S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], !Ref "AWS::Region"]]
+        S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "lambda.zip"]]
+      Environment:
+        Variables:
+          MediainfoTable: !Ref MediainfoTable 
+          MediainfoTableTTL: !Ref MediainfoTableTTL 
+      Runtime:  python3.6
+      Timeout: 120
+  
+  APILambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-APILambdaRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - 
+          PolicyName: !Sub "${AWS::StackName}-APILambdaPolicy"
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: 
+                  - !Join ["", ["arn:aws:logs:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":log-group:/aws/lambda/*"]]
+              -
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:Scan
+                  - dynamodb:BatchGetItem
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:ListTables
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:DescribeReservedCapacity
+                  - dynamodb:DescribeReservedCapacityOfferings
+                  - dynamodb:ListTagsOfResource
+                  - dynamodb:DescribeTimeToLive
+                  - dynamodb:DescribeLimits
+                  - dynamodb:ListGlobalTables
+                Resource:
+                  - "*"
+                  # - !Join ["", ["arn:aws:dynamodb:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":table/",Ref: "JobTable"]]
+                  # - !Join ["", ["arn:aws:dynamodb:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":table/",Ref: "MediaInfoTable"]]   
+        
+Outputs:
+  MediainfoTable:
+    Description: The name of the Table to get Mediainfo data from
+    Value: !Ref MediainfoTable 
+  APILambdaRoleArn:
+    Description: The ARN of the role to use to grant APIs access to Dyanmodb tables
+    Value: !GetAtt APILambdaRole.Arn
