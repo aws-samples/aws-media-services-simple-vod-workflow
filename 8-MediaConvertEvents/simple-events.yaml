@@ -1,0 +1,193 @@
+Parameters:
+
+  EventTableTTL:
+    Description: The amount of time in days that current event data is cached in Dynamodb tables
+    Type: Number
+    Default: 1
+
+Mappings:
+  SourceCode:
+    General:
+      S3Bucket: "rodeolabz"
+      KeyPrefix: "vodtk/1b-mediaconvert-events"
+
+Resources:
+
+  EventTable: 
+    Type: AWS::DynamoDB::Table
+    Properties: 
+      TableName: !Sub "${AWS::StackName}-EventTable"
+      AttributeDefinitions: 
+        - 
+          AttributeName: id
+          AttributeType: S
+        -
+          AttributeName: timestamp
+          AttributeType: N 
+        -
+          AttributeName: jobId
+          AttributeType: S 
+      KeySchema: 
+        - 
+          AttributeName: id
+          KeyType: HASH
+        -
+          AttributeName: timestamp
+          KeyType: RANGE
+      GlobalSecondaryIndexes: 
+        - 
+          IndexName: jobId-timestamp-index
+          KeySchema: 
+            - 
+              AttributeName: jobId
+              KeyType: HASH
+            - 
+              AttributeName: timestamp
+              KeyType: RANGE
+          Projection: 
+            ProjectionType: ALL
+          ProvisionedThroughput: 
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5  
+      ProvisionedThroughput: 
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      TimeToLiveSpecification:
+        AttributeName: timestampTTL
+        Enabled: true
+  
+  EventLambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-EventLambdaRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - 
+          PolicyName: !Sub "${AWS::StackName}-EventLambdaPolicy"
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: 
+                  - !Join ["", ["arn:aws:logs:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":log-group:/aws/lambda/*"]]
+              -
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                Resource:
+                  - !Join ["", ["arn:aws:dynamodb:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":table/",Ref: "EventTable"]]   
+
+  EventInvokeLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt EventCollectorLambda.Arn
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: 
+        Fn::GetAtt:
+          - "AllMediaConvertEventRule"
+          - "Arn"              
+
+  AllMediaConvertEventRule:
+    Type: "AWS::Events::Rule"
+    Properties: 
+      Description: catches MediaConvert Events
+      State: "ENABLED"
+      EventPattern: 
+        source: 
+          - "aws.mediaconvert" 
+      Targets:
+        -
+          Arn: 
+            Fn::GetAtt:
+              - "EventCollectorLambda"
+              - "Arn"
+          Id: "TargetEventCollectorLambda"
+
+  EventCollectorLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-EventCollector
+      Description: Collect events, update status, make metrics 
+      Handler: simple_event_collector.lambda_handler
+      Role: !GetAtt EventLambdaRole.Arn
+      Code:
+        S3Bucket: !Join ["-", [!FindInMap ["SourceCode", "General", "S3Bucket"], !Ref "AWS::Region"]]
+        S3Key: !Join ["/", [!FindInMap ["SourceCode", "General", "KeyPrefix"],  "lambda.zip"]]
+      Environment:
+        Variables:
+          EventTable: !Ref EventTable 
+          EventTableTTL: !Ref EventTableTTL 
+      Runtime:  python3.6
+      Timeout: 120
+
+  APILambdaRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      RoleName: !Sub "${AWS::StackName}-APILambdaRole"
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - 
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - 
+          PolicyName: !Sub "${AWS::StackName}-APILambdaPolicy"
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource: 
+                  - !Join ["", ["arn:aws:logs:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":log-group:/aws/lambda/*"]]
+              -
+                Effect: Allow
+                Action:
+                  - dynamodb:GetItem
+                  - dynamodb:Scan
+                  - dynamodb:BatchGetItem
+                  - dynamodb:DescribeTable
+                  - dynamodb:GetItem
+                  - dynamodb:ListTables
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:DescribeReservedCapacity
+                  - dynamodb:DescribeReservedCapacityOfferings
+                  - dynamodb:ListTagsOfResource
+                  - dynamodb:DescribeTimeToLive
+                  - dynamodb:DescribeLimits
+                  - dynamodb:ListGlobalTables
+                Resource:
+                  - "*"
+                  # - !Join ["", ["arn:aws:dynamodb:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":table/",Ref: "JobTable"]]
+                  # - !Join ["", ["arn:aws:dynamodb:", Ref: "AWS::Region", ":", Ref: "AWS::AccountId", ":table/",Ref: "EventTable"]]   
+        
+Outputs:
+  EventTable:
+    Description: The name of the Table to get Event data from
+    Value: !Ref EventTable 
+  APILambdaRoleArn:
+    Description: The ARN of the role to use to grant APIs access to Dyanmodb tables
+    Value: !GetAtt APILambdaRole.Arn
