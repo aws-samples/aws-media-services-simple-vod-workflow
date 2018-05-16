@@ -3,7 +3,7 @@
 
 Video delivery workflows use MediaConvert to transcode source videos into formats that ensure high quality playback on all of the devices and platforms needed to reach target viewers.  A watchfolder is a common method for automating video ingest and delivery workflows. Users with video ready for delivery upload their files to a known storage location.  The upload automatically triggers an ingest workflow that converts the video to formats suitable for delivery and stores them in the cloud for on-demand viewing.   The Serverless Video Conversion Watchfolder Workflow solves this problem by using [Amazon S3](https://aws.amazon.com/s3), [AWS Lambda](https://aws.amazon.com/lambda/), [AWS MediaConvert](https://aws.amazon.com/mediaconvert/), [Amazon CloudWatch Events](https://aws.amazon.com/cloudwatch) and [Amazon Simple Notification Service](https://aws.amazon.com/sns).
 
-The workflow will create the following outputs for each video uploaded to the WatchFolder S3 bucket /input folder:
+The workflow will create the following outputs for each video uploaded to the WatchFolder S3 bucket /inputs folder:
 - An Apple HLS adaptive bitrate stream for playout on multiple sized devices and varying bandwiths.
 - An MP4 stream
 - Thumbnail images collected at intervals
@@ -21,7 +21,7 @@ To see some of the other powerful broadcast grade encoding features of AWS Eleme
 It's easy to create outputs with other formats supported by MediaConvert.  MediaConvert job settings can be placed in JSON files in the WatchFolder S3 bucket /jobs folder.  The workflow will run a job for each settings file.  If no setting are specified, then the Default job included in this project will run.
 
 ## Walkthrough of the Workflow
-1. The Ingest user uploads a video to the WatchFolder bucket /input folder in S3.  Only files added to the /input folder will trigger the workflow.
+1. The Ingest user uploads a video to the WatchFolder bucket /inputs folder in S3.  Only files added to the /inputs folder will trigger the workflow.
 
 2. The s3:PutItem event triggers a Lambda function that calls MediaConvert to convert the videos.
 
@@ -59,11 +59,11 @@ The information about the resources created is in the **Outputs** tab of the sta
 
 ## Testing the Example
   
-You can use your own video or use the test.mp4 video included in this folder to test the workflow. 
-
-In the next module of this lab, we will setup automated monitoring of jobs created using the watchfolder workflow.  Until then, you can monitor the the MediaConvert console.  
+You can use your own video or use the test.mp4 video included in this folder to test the workflow.  
 
 1. Open the S3 console overview page for the watchfolder S3 bucket you created earlier.
+2. Click on **+ Create folder** and enter `inputs` as the folder name and click **Save**
+3. Click on the **inputs** folder link to open it.
 1. Select **Upload** and then choose the file `test.mp4` from the directory for this lab module on your computer.
 1. Note the time that the upload completed.
 1. Open the MediaConvert jobs page and find a job for the input 'test.mp4' that was started near the time your upload completed.  
@@ -77,7 +77,7 @@ In the next module of this lab, we will setup automated monitoring of jobs creat
 
     ![test video](../images/play-test-video.png)
 
-5. Check the email you used to setup the workflow.  You should have a message similar to this:
+5. Check the email you used to setup the workflow.  You should have a message similar to the one below.  The link should take you to the same job details page you found manually in the previous steps:
 
     ![sns email](../images/sns-email.png)
 
@@ -104,11 +104,11 @@ The following sections explain all of the resources created by the CloudFormatio
 ### Lambda
 - **S3InvokeLambda** - a Lambda Permission that gives S3 permission to invoke the MediaConvert lambda. 
 
-- **LambdaConvert** - a Lambda function that gets a video from the s3:putItem event and runs MediaConverts jobs from JSON settings in the Watchfolder/input folder.
+- **LambdaConvert** - a Lambda function that gets a video from the s3:putItem event and runs MediaConverts jobs from JSON settings in the s3://Watchfolder/jobs folder.
 
 ### S3
 
-- **WatchFolder** - S3 bucket used to store inputs to the conversion workflow.  The NotificationConfiguration sets up the lambda trigger.  The bucket is set to expire objects that are more than 7 days old.  This setting is useful for testing, but can be removed, if needed.
+- **WatchFolder** - S3 bucket used to store inputs and optional job settings to the conversion workflow.  The NotificationConfiguration sets up the lambda trigger whenever an object is uploaded to the **/inputs** folder.  MediaCOnvert job settings JSON files can be place in the **/jobs** folder.  The workflow will run a job for each settings file it finds there. The bucket is set to expire objects that are more than 7 days old.  This setting is useful for testing, but can be removed, if needed.
 
 - **MediaBucket** - S3 bucket used to store outputs of the conversion workflow.  Cross Origin Resource sharing is enabled to allow the videos to be played out from websites and browsers.  The bucket is set to expire objects that are more than 7 days old.  This setting is useful for testing, but can be removed, if needed.
 
