@@ -283,8 +283,8 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
 1. On the **Environment Variables** panel of the VODLambdaConvert page, enter the following keys and values:
 
-    1. DestinationBucket = vod-site-firstname-lastname (or whatever you named your S3 Watchfolder bucket)
-    1. MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/MediaConvertRole
+    1. DestinationBucket = vod-mediabucket-firstname-lastname (or whatever you named your S3 MediaBucket bucket)
+    1. MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/MediaConvertRole (or whatever you named your role to pass to MediaConvert)
     2. Application = VOD
 
     ![Lambda function code screenshot](../images/lambda-environment.png)  
