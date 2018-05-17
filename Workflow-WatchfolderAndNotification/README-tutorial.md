@@ -509,7 +509,7 @@ Cloudwatch event rules create a mapping between event patterns and target action
 11. Enter the following string in the **Input Template** box:
 
     ```
-    "Job <jobId> completed with status <status>\n Job details: https://us-west-2.console.aws.amazon.com/mediaconvert/home?region=us-west-2#/jobs/summary/<jobId>"
+    "Job <jobId> finished with status <status>. Job details: https://<region>.console.aws.amazon.com/mediaconvert/home?region=<region>#/jobs/summary/<jobId>"
     ```
 
 12. Click the **Configure details** button to go to the next page.
@@ -529,11 +529,11 @@ When the VODNotifyEventRule matches a COMPLETE or ERROR event from MediaConvert,
 
 2. Find the policy you created earlier, VODNotification, and click on the link to go to the detail page.
 
-3. Select `Edit topic policy` on the **Other topic actions** drop-down menu.
+3. Select **Edit topic policy** on the **Other topic actions** drop-down menu.
 
 4. On the **Advanced view** tab, edit the policy JSON by adding the following statement.  
-    1. You will need to add a commma character (',')  Replace the ARN with the ARN for this Topic.
-        1. Add the statement to the begining of the list object.  Right after the line that says **"Statement": [**.
+    1. Replace the ARN with the ARN for this Topic.
+        1. Add this JSON fragment to the begining of the list object.  Right after the line that says **"Statement": [**.
 
     ```
     {

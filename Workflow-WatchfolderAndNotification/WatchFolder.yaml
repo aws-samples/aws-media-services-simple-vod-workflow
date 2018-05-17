@@ -238,7 +238,7 @@ Resources:
               jobId: "$.detail.jobId"
               region: "$.region" 
               status: "$.detail.status"
-            InputTemplate: '"Job <jobId> finished with status <status>. Job details: https://us-west-2.console.aws.amazon.com/mediaconvert/home?region=<region>#/jobs/summary/<jobId>"'
+            InputTemplate: '"Job <jobId> finished with status <status>. Job details: https://<region>.console.aws.amazon.com/mediaconvert/home?region=<region>#/jobs/summary/<jobId>"'
 
 Outputs:
   MediaBucket:
