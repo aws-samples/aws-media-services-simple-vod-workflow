@@ -66,6 +66,8 @@ You will need to download this project to your computer in order to create the b
 
 - [**Automating Jobs with Lambda and S3 Event Triggers**](7-MediaConvertJobLambda/README.md) - This module guides the participant in creating an automated "watchfolder" workflow.  Video files added to an S3 bucket automatically trigger a MediaConvert job to run on the uploaded files.
 
+- [**VOD AWS Elemental MediaTailor**](11-VODMediaTailor) - This module guides the participant in inserting ads to their HLS media asset stored in AWS Elemental MediaStore.
+
 # Start the Workshop
 
 Move forward to the first module for [**AWS IAM and S3**](1-IAMandS3/README.md).
