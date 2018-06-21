@@ -10,27 +10,6 @@ You can optionally create a restricted user with access only to the resources ne
 
 MediaConvert is available in several regions. But for the purpose of this lab, we will use the **US West (Oregon)** region.
 
-## Preconfigured AWS Account 
-
-If you are completing this lab as part of an in-person workshop, your account has been preconfigured with the permissions, roles and buckets needed for the workshop.  You will need to locate the name of the resources to be used in future steps in the Outputs for the CloudFormation stack that did the account setup.  
-
-1. Open the CloudFormation console for the region you are working in (us-west-2).  
-1. From the Stacks page, find the Stack called **vod** or **vod-dayofweek**. 
-1. Go to the Stack details page and expand the Outputs section.  You will find two outputs there:
-    * **MediaConvertRole** is the name of the AWS Role that can be passed to MediaConvert to grant access to S3 and other account resources MediaConvert needs to process jobs.
-    * **MediaBucket** is the name of the bucket you will use to store MediaConvert outputs.
-
-    ![Cloudformation outputs](../images/cloudformation-outputs.png)
-1. **Save this page in a browser tab** to use in future steps of the Workshop.
-
-
-
-Move forward to the next module  [**AWS Elemental Media Convert Jobs**](../2-MediaConvertJobs/README.md).
-
-## No previous account configuration 
-
-Do this step only if you are not using a preconfigured account. 
-
 In order to complete this workshop you'll need an AWS Account with access to create policies and roles within the AWS Identity and Access Management (IAM) service. 
 
 The signed-in user must have the AdministratorAccess policy or a policy that allows the user to access all actions for the mediaconvert service and at least read access to CloudWatch. The steps for creating a policy for AWS Elemental MediaPConvert is covered near the end of this module.
@@ -84,80 +63,7 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
 
 1. Choose **Create role**.
 
-
-1. Type `vod-MediaConvertRole` into the filter box on the Roles page and choose the role you just created.
-
-1. On the Trust relationships tab, click on the **Edit trust relationship** button
-
-1. Replace the trust relationship with the following JSON:
-
-```
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": [
-            "mediaconvert.ap-northeast-1.amazonaws.com",
-            "mediaconvert.ap-southeast-1.amazonaws.com",
-            "mediaconvert.ap-southeast-2.amazonaws.com",
-            "mediaconvert.eu-central-1.amazonaws.com",
-            "mediaconvert.eu-west-1.amazonaws.com",
-            "mediaconvert.us-east-1.amazonaws.com",
-            "mediaconvert.us-west-1.amazonaws.com",
-            "mediaconvert.us-west-2.amazonaws.com"
-        ]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-```
-
-1. Click on **Update Trust policy** to save the policy
-
-1. On the Permissions tab, click on the **Add Inline Policies** link to create a new inline policy.
-1. On the **Create Policy** page, click on the **JSON** tab 
-1. Copy and paste the following JSON into the **Policy Document** box:
-
-```
-{
-    "Statement": [
-        {
-            "Action": [
-                "s3:*"
-            ],
-            "Resource": [
-                "*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "autoscaling:Describe*",
-                "cloudwatch:*",
-                "logs:*",
-                "sns:*"
-            ],
-            "Resource": [
-                "*"
-            ],
-            "Effect": "Allow"
-        }
-    ]
-}
-```
-1. Select the **Review Policy** button at the bottom of the page.
-1. On the Review Policy page, enter `vod-MediaConvertPolicy` in the policy name box.
-
-
-1. Click on **Create Policy** to add the policy.
-1. Scroll to the top of the page for your new Role and note the **ARN**. You will use this in the following modules.
-
 ## 2. Create an S3 bucket to store and host MediaConvert outputs
-
-### Option1: No previous account configuration
 
 In this section, you will use the AWS console to create an S3 bucket to store video and image outputs from MediaConvert and host a simple web page that can be used to play out the videos.  Later, the resulting videos and images will be played out using the S3 https resource using several different players both inside and outside of the the amazonaws domain.  
 
