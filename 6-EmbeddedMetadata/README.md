@@ -30,6 +30,7 @@ Create a duplicate of the job you created in the last module.  Modify the job to
 1. Select **Jobs** from the side bar menu. 
 1. Find the job  you created in the last module and click on the Job Id link to open the **Job details** page.
 1. Select **Duplicate**
+1. Make sure the input video path for **Input 1** is set to: `s3://rodeolabz-us-west-2/vodconsole/VANLIFE.m2ts`.  This video has been created with SCTE-35 Ad Markers inserted.
 
 #### Enable SCTE35 Ad availability blanking
 
