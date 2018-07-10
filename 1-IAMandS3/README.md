@@ -16,30 +16,15 @@ The signed-in user must have the AdministratorAccess policy or a policy that all
 
 The code and instructions in this workshop assume only one student is using a given AWS account at a time. If you try sharing an account with another student, you'll run into naming conflicts for certain resources. You can work around this by either using a suffix in your resource names or using distinct Regions, but the instructions do not provide details on the changes required to make this work.
 
-### Option 1: Skip ahead with CloudFormation
+### (Optional) Skip ahead with CloudFormation
 
-If you would like to skip this part of the lab and move on the the next module, you can run the CloudFormation provided with this project.
+If you would like to skip this part of the lab and move on the the next module, a CloudFormation script is provided in this folder in `MediaConvertIAMandS3.yaml`.  
 
-1. Make sure your region is set to US-West-Oregon for this lab.
-1. From the AWS Management Console, click on **Services** and then select **CloudFormation**.
-1. Select **Create stack** to go to the **Create stack** page
-1. Select the **Upload a template to Amazon S3** checkbox then select **Choose file**
-1. Navigate to the directory where you downloaded the lab.  Then select **1-IAMandS3->MediaConvertIAMandS3.yaml**. Then select **Open**.
-1. Select **Next** to move to the **Specify details** page.
-1. Enter `vod` for the in the **Stack name** box.  Note: you can choose other stack names, but using "vod" will create resource with names consistent with the rest of the lab.
-1. Select **Next** to move to the **Options** page.  Leave this page as defaults.
-1. Select **Next** to move to the **Review** page.
-1. Select the checkbox to acknowledge creating resources, then select **Create**
-1. Wait for the stack to be created.
-1. From the Stacks page, find the Stack called **vod**.
-1. Go to the Stack details page and expand the Outputs section of the page.  You will find two outputs there:
-    
-    * **MediaConvertRole** is the ARN for the AWS Role that can be passed to MediaConvert to grant access to S3 and other account resources MediaConvert needs to process jobs.
-1. Save this page in a browser tab or save the ARNs to be used in future steps of the Workshop.
+[**Instructions to create resources in this section using CloudFormation**](README-cf.md)
 
-Move forward to the next module  [**AWS Elemental Media Convert Jobs**](../2-MediaConvertJobs/README.md).
+Otherwise, continue to the next section.
 
-### Option 2: Create a IAM Role to Use with AWS Elemental MediaConvert
+### Create a IAM Role to Use with AWS Elemental MediaConvert
 
 MediaConvert will will need to be granted permissions to read and write files from your S3 buckets and generate CloudWatch events as it processes videos.  MediaConvert is granted the permissions it needs by assuming a role that is passed to it when you create a job.
 
@@ -51,17 +36,17 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
 
 1. From the AWS Management Console, click on **Services** and then select **IAM** in the Security, Identity & Compliance section.
 
-1. Select **Roles** in the left navigation bar and then choose **Create new role**.
+2. Select **Roles** in the left navigation bar and then choose **Create new role**.
 
-1. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
+3. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
 
     **Note:** Selecting a role type automatically creates a trust policy for your role that allows AWS services to assume this role on your behalf. If you were creating this role using the CLI, AWS CloudFormation or another mechanism, you would specify a trust policy directly.
 
-1. Choose **Next:Review**.
+4. Choose **Next:Review**.
 
-1. Enter `vod-MediaConvertRole` for the **Role name**.
+5. Enter `vod-MediaConvertRole` for the **Role name**.
 
-1. Choose **Create role**.
+6. Choose **Create role**.
 
 ## 2. Create an S3 bucket to store and host MediaConvert outputs
 
@@ -125,65 +110,9 @@ In order to facilitate https access from anonymous sources inside and outside th
 
 ### (Optional) Adding AWS Elemental MediaConvert permissions to an IAM user
 
-This section goes over policies you will need to add if you are creating restricted IAM user accounts that can run MediaConvert.  This will give the IAM user access to all MediaConvert service APIs and console. 
-
-#### High-Level Instructions
-
 You may want to create restricted users to work with MediaConvert.  This section goes through creating the policy needed to complete this lab for a user that doesn't have Administrator access.  This step needs to be completed by a user with Administrator access to grant permissions.
 
-Create an IAM Policy and name it `vod-MediaConvertUserPolicy`.  Use inline policies to grant permissions to other resources needed for the execute MediaConvert.  Attach the new policy to an IAM user.
-
-#### Detailed Instructions - create a managed policy
-1. From the AWS Management Console, click on **Services** and then select **IAM** in the Security, Identity & Compliance section.
-1. Select **Policies** from the side bar menu.
-1. Click on the **Create policy** button.
-1. Select **Create Your Own Policy**.
-1. Enter `vod-MediaConvertUserPolicy` as the policy name
-1. Copy and paste the following JSON into the **Policy Document**, then select **Create** to create the policy
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AccessMediaConvert",
-            "Effect": "Allow",
-            "Action": [
-                "mediaconvert:*"
-            ],
-            "Resource": [
-                "arn:aws:mediaconvert:*"
-            ]
-        },
-        {
-            "Sid": "PassRolestoMediaConvert",
-            "Action": [
-                "iam:ListRoles",
-                "iam:PassRole"
-            ],
-            "Effect": "Allow",
-            "Resource": "arn:aws:iam::*"
-        },
-        {
-            "Sid": "ListWriteS3Buckets",
-            "Action": "s3:*",
-            "Effect": "Allow",
-            "Resource": "*"
-        }
-    ]
-}
-```
-
-#### Detailed Instructions - attach the managed policy to an IAM user
-
-1. Select **Users** from the IAM side bar menu.
-1. Click on the User Name you want to add permissions to navigate to the user Summary page.
-1. Select **Add permissions** 
-1. On the Grant Permissions page, select **Attach existing policies directly**
-1. Enter `vod-MediaConvertUserPolicy` in the search box and then select the checkbox for the policy from the returned results. 
-1. Select the **Next: Review** button on the bottom of the page.
-1. Select the **Add permission** button
-
-6. Click on Validate Policy to check for typos, then click Apply Policy
+[**Instructions to create a restricted user**](README-user.md)
 
 ## Completion
 
