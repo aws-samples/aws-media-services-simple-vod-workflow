@@ -49,45 +49,6 @@ In this module, you will create a MediaConvert job that take a single input vide
 
     ![input 1 image](../images/mediaconvert-create-job-input1.png)
 
-
-#### Apple HLS Output Group
-
-1. Under **Output Groups** on the Job panel, select **Add**.
-1. Check the **Apple HLS** box then click on **Select**.
-1. Make sure **Apple HLS** is selected in the Job panel in the Output groups section so that Apple HLS form is loaded.
-1. Fill in `HLS` in the **Custom group name** box.
-1. Use the bucket name you saved from the previous module to construct the output S3 path as follows:
-    
-    ```
-    s3://<MediaBucket>/assets/VANLIFE/HLS/
-    ```
-
-1. Fill in the resulting output S3 path in the **Destination** box.
-1. Leave the remaining settings as the default.
-1. Scroll down to the **Outputs** panel and click on **Add output** two times so that there are a total of three outputs.
-
-    ![3 HLS Outputs](../images/mediaconvert-hls-3-outputs.png)
-
-1. Select Output 1 from the Output Groups section Jobs panel to go to the Output settings form for Output 1.
-1. Enter `_360` in the **Name modifier** box
-1. Enter `$dt$` in the **Segment modifier** box.  Note: the reason we need to do this is that we will be using the same output location for our output files.  This will prevent us from reading in segments left over from another, longer, video that was written to the same folder.
-
-    ![HLS output settings](../images/mediaconvert-hls-settings.png)
-
-1. Scroll down to the **Stream settings** panel and enter `640` and `360` in the **Resolution (w x h)** box
-1. Scroll down to the **Bitrate (bits/s)** box and enter `1000000`.
-1. Select Output 2 from the Output Groups section Jobs panel to go to the Output settings form for Output 2.
-1. Enter `_540` in the **Name modifier** box
-1. Enter `$dt$` in the **Segment modifier** box.
-1. Scroll down to the **Stream settings** panel and enter `960` and `540` in the **Resolution (w x h)** box
-1. Scroll down to the **Bitrate (bits/s)** box and enter `2000000`.
-1. Select Output 3 from the Output Groups section Jobs panel to go to the Output settings form for Output 3.
-1. Enter `_720` in the **Name modifier** box
-1. Enter `$dt$` in the **Segment modifier** box.
-11. Scroll down to the **Stream settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
-1.  Scroll down to the **Bitrate (bits/s)** box and enter `3000000`.
-
-
 #### MP4 File Output Group 
 
 1. Under **Output Groups** on the Job panel, select **Add**.
@@ -110,7 +71,66 @@ In this module, you will create a MediaConvert job that take a single input vide
 1. 1.  Scroll down to the **Bitrate (bits/s)** box and enter `3000000`.
 1. Leave all other settings for Output 1 as the default.
 
-#### Thumbnail Output Group
+#### Job settings section
+
+1. Select **Settings** from the **Job settings** section of the Job panel to open the **Job settings** form.
+1. Select the role you created in the previous section of this lab from the **IAM** dropdown.
+
+    ![Job settings image](../images/mediaconvert-job-settings.png)
+
+#### Create the job with only the MP4 output 
+
+At this point, we will test our job settings with just the MP4 output to make sure everything is working.  In the next step, we will create a duplicate job and add the HLS and Thumbnails outputs.  This step is not nescessary, but lets us test our role and bucket permissions without having to input alot of settings.
+
+1. Scroll to the bottom of the page and select **Create**
+2. Wait for the job to complete.  Monitor the status of the job by refreshing the **Job summary** page using the **refresh** button. 
+
+    ![Save the Job ID](../images/mediaconvert-save-jobid.png)
+
+#### Duplicate the job from the previous section
+
+1. From the **Job summary** page for the job that just completed, select the **Duplicate** button.  This creates a new job with the same settings as the original job.
+
+#### Add an Apple HLS Output Group
+
+1. Under **Output Groups** on the Job panel, select **Add**.
+2. Check the **Apple HLS** box then click on **Select**.
+3. Make sure **Apple HLS** is selected in the Job panel in the Output groups section so that Apple HLS form is loaded.
+4. Fill in `HLS` in the **Custom group name** box.
+5. Use the bucket name you saved from the previous module to construct the output S3 path as follows:
+    
+    ```
+    s3://<MediaBucket>/assets/VANLIFE/HLS/
+    ```
+
+6. Fill in the resulting output S3 path in the **Destination** box.
+7. Leave the remaining settings as the default.
+8. Scroll down to the **Outputs** panel and click on **Add output** two times so that there are a total of three outputs.
+
+    ![3 HLS Outputs](../images/mediaconvert-hls-3-outputs.png)
+
+9. Select Output 1 from the Output Groups section Jobs panel to go to the Output settings form for Output 1.
+10. Enter `_360` in the **Name modifier** box
+11. Enter `$dt$` in the **Segment modifier** box.  Note: the reason we need to do this is that we will be using the same output location for our output files.  This will prevent us from reading in segments left over from another, longer, video that was written to the same folder.
+
+    ![HLS output settings](../images/mediaconvert-hls-settings.png)
+
+12. Scroll down to the **Stream settings** panel and enter `640` and `360` in the **Resolution (w x h)** box
+13. Scroll down to the **Bitrate (bits/s)** box and enter `1000000`.
+14. Select Output 2 from the Output Groups section Jobs panel to go to the Output settings form for Output 2.
+15. Enter `_540` in the **Name modifier** box
+16. Enter `$dt$` in the **Segment modifier** box.
+17. Scroll down to the **Stream settings** panel and enter `960` and `540` in the **Resolution (w x h)** box
+18. Scroll down to the **Bitrate (bits/s)** box and enter `2000000`.
+19. Select Output 3 from the Output Groups section Jobs panel to go to the Output settings form for Output 3.
+20. Enter `_720` in the **Name modifier** box
+21. Enter `$dt$` in the **Segment modifier** box.
+22. Scroll down to the **Stream settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
+23. Scroll down to the **Bitrate (bits/s)** box and enter `3000000`.
+
+
+
+#### Add a Thumbnail Output Group
 
 1. Under **Output Groups** on the Job panel, select **Add**.
 1. Check the **File group** box then click on **Select**.
@@ -153,10 +173,12 @@ In this module, you will create a MediaConvert job that take a single input vide
 ## 2. View outputs in S3  
 
 1. In the AWS Management Console choose **Services** then select **S3** under Storage.
-1. Select the bucket where your output files are located.  You should find a folder called `assets/VANLIFE/` with subfolders for `HLS`, `MP4` and `Thumbnails`.
-1. **Save this page open in a browser tab** so you can access videos for playout in later modules.
+2. Select the bucket where your output files are located.  You should find a folder called `assets/VANLIFE/` with subfolders for `HLS`, `MP4` and `Thumbnails`.
+3. **Save this page open in a browser tab** so you can access videos for playout in later modules.
 
 ![VANLIFE in S3](../images/module-2-s3.png)
+
+NOTE: You can also access the S3 bucket for each output group using the links in the **Outputs** section of the MediaConvert console **Job details** page.
 
 ## 3. Play the videos
 
