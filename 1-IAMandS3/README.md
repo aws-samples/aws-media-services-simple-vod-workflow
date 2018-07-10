@@ -24,7 +24,7 @@ If you would like to skip this part of the lab and move on the the next module, 
 
 Otherwise, continue to the next section.
 
-### Create a IAM Role to Use with AWS Elemental MediaConvert
+## 1. Create an IAM Role to Use with AWS Elemental MediaConvert
 
 MediaConvert will will need to be granted permissions to read and write files from your S3 buckets and generate CloudWatch events as it processes videos.  MediaConvert is granted the permissions it needs by assuming a role that is passed to it when you create a job.
 
@@ -108,7 +108,7 @@ In order to facilitate https access from anonymous sources inside and outside th
 
 1. Select **Save**
 
-### (Optional) Adding AWS Elemental MediaConvert permissions to an IAM user
+## (Optional) Adding AWS Elemental MediaConvert permissions to an IAM user
 
 You may want to create restricted users to work with MediaConvert.  This section goes through creating the policy needed to complete this lab for a user that doesn't have Administrator access.  This step needs to be completed by a user with Administrator access to grant permissions.
 
