@@ -67,7 +67,7 @@ Use inline policies to grant permissions to other resources needed for the lambd
 
 1. Choose **Next:Review**.
 
-1. Repeat the search with `AmazonDyanamoDBFullAccess` in the **Filter** text box and check the name next to that role.
+1. Repeat the search with `AmazonDynamoDBFullAccess` in the **Filter** text box and check the name next to that role.
 
 1. Enter `EventLambdaRole` for the **Role name**.
 
