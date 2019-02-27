@@ -27,7 +27,7 @@ This lab assumes that you have the following:
 
 1. For the **Video content source**, enter the MediaStore URL link to the asset Endpoint URL (https://kgvcvxg57iigbp.data.mediastore.us-west-2.amazonaws.com/hls/caminandes_short/master.m3u8) but  **_without the manifest filename_**. That is, **omit** master.m3u8.
 
-1. Enter `https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=` for the **Ad decision server**. 
+1. Enter `https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=[avail.num]` for the **Ad decision server**. 
 
 	![alt](emt_config.png)
 
