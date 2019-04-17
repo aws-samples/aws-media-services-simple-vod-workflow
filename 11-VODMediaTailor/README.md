@@ -9,7 +9,7 @@ Below is a diagram showing how the media asset interacts with AWS Elemental Medi
 
 ## Prerequisites
 This lab assumes that you have the following:
-1. An HLS media asset either in Amazon S3 or AWS Elemental MediaStore. The asset need not have any ad markers. In this tutorial, we will use [this asset](https://kgvcvxg57iigbp.data.mediastore.us-west-2.amazonaws.com/hls/caminandes_short/master.m3u8) stored in AWS Elemental MediaStore.
+1. An HLS media asset either in Amazon S3, AWS Elemental MediaStore, or some other file storage. The asset need not have any ad markers. In this tutorial, we will use [this asset](https://s3-us-west-2.amazonaws.com/vast-demo-bucket/caminandes/master.m3u8) stored in S3.
 1. An Ad Decision Server (ADS), or you may use a static VAST response XML hosted on a server. Here, we will use a sample VMAP response hosted and publicly made available by Google's DoubleClick for Publishers and can be found [here](https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=).
 
 
@@ -25,7 +25,7 @@ This lab assumes that you have the following:
 
 1. Enter `MyTestCampaign` for the **Configuration  Name**.
 
-1. For the **Video content source**, enter the MediaStore URL link to the asset Endpoint URL (https://kgvcvxg57iigbp.data.mediastore.us-west-2.amazonaws.com/hls/caminandes_short/master.m3u8) but  **_without the manifest filename_**. That is, **omit** master.m3u8.
+1. For the **Video content source**, enter the S3 URL link to the asset Endpoint URL `https://s3-us-west-2.amazonaws.com/vast-demo-bucket/caminandes/master.m3u8` but  **_without the manifest filename_**. That is, **omit** master.m3u8.
 
 1. Enter `https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/ad_rule_samples&ciu_szs=300x250&ad_rule=1&impl=s&gdfp_req=1&env=vp&output=vmap&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ar%3Dpremidpost&cmsid=496&vid=short_onecue&correlator=[avail.random]` for the **Ad decision server**. 
 
@@ -60,7 +60,7 @@ concatenated with the **manifest filename of the asset in MediaStore** (eg. _mas
 
 1. Select the **Web** delivery method for your content and hit the **Get Started** button. 
 
-1. Under **Origin Settings**, enter the domain name of your origin for **Origin Domain Name**. In our case, this is the domain name of MediaStore (eg. _kgvcvxg57iigbp.data.mediastore.us-west-2.amazonaws.com_).
+1. Under **Origin Settings**, enter the domain name of your origin for **Origin Domain Name**. In our case, this is the domain name of S3 (eg. _vast-demo-bucket.s3.amazonaws.com_).
 
 1. Under **Origin Protocol Policy**, select **HTTPS only**. 
 
@@ -88,9 +88,9 @@ concatenated with the **manifest filename of the asset in MediaStore** (eg. _mas
 
 1. Click on the **Behaviors** tab and click on the **Create Behavior** button.
 
-1. Enter `/hls/caminandes_short/*` for the **Path Pattern**. 
+1. Enter `/caminandes/*` for the **Path Pattern**. 
 
-1. Under **Origin**, select the MediaStore origin. 
+1. Under **Origin**, select the S3 origin. 
 
 1. Click the **Create** button to add another cache behavior. 
 
@@ -112,7 +112,7 @@ concatenated with the **manifest filename of the asset in MediaStore** (eg. _mas
 
 1. Click on **Yes, Edit** button. 
 
-1. Double-check the precedence of the caching behavior as this matters. Your primary precedence should be the MediaTailor origin (precedence 0), followed by the MediaStore origin (precedence 1), and lastly by the ads origin (which is at Precedence 2 and is the Default). If this is not the precedence reflected, select one of the Behaviors and **Change Precedence** by clicking on either the **Move Up** or **Move Down** button, to make the adjustment. 
+1. Double-check the precedence of the caching behavior as this matters. Your primary precedence should be the MediaTailor origin (precedence 0), followed by the S3 origin (precedence 1), and lastly by the ads origin (which is at Precedence 2 and is the Default). If this is not the precedence reflected, select one of the Behaviors and **Change Precedence** by clicking on either the **Move Up** or **Move Down** button, to make the adjustment. 
 
 	![alt](CloudFrontBehaviorSettings.png)
 
@@ -123,7 +123,7 @@ concatenated with the **manifest filename of the asset in MediaStore** (eg. _mas
 
 1. Click on the Configuration (`MyTestCampaign`) you created in section 1 and hit the **Edit** button.
 
-1. For the **CDN content segment prefix**, construct your URL by putting together the protocol, the CloudFront **Domain Name**, and the path of the MediaStore origin. For example: _https://**da4bw8c4fh0km.cloudfront.net**/hls/caminandes\_short_
+1. For the **CDN content segment prefix**, construct your URL by putting together the protocol, the CloudFront **Domain Name**, and the path of the MediaStore origin. For example: _https://**da4bw8c4fh0km.cloudfront.net**/caminandes_
 
 1. For the **CDN ad segment prefix**, construct your URL by putting together the protocol, and the CloudFront  **Domain Name**. For example: _https://da4bw8c4fh0km.cloudfront.net_
 
