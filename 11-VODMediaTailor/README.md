@@ -60,7 +60,7 @@ concatenated with the **manifest filename of the asset in MediaStore** (eg. _mas
 
 1. Select the **Web** delivery method for your content and hit the **Get Started** button. 
 
-1. Under **Origin Settings**, enter the domain name of your origin for **Origin Domain Name**. In our case, this is the domain name of S3 (eg. _vast-demo-bucket.s3.amazonaws.com_).
+1. Under **Origin Settings**, enter the domain name of your origin for **Origin Domain Name**. In our case, this is the domain name of our S3 bucket (eg. _vast-demo-bucket.s3.amazonaws.com_).
 
 1. Under **Origin Protocol Policy**, select **HTTPS only**. 
 
