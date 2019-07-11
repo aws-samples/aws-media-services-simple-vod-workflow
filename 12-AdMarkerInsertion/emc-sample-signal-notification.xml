@@ -1,0 +1,54 @@
+<SignalProcessingNotification xmlns="urn:cablelabs:iptvservices:esam:xsd:signal:1" 
+    xmlns:sig="urn:cablelabs:md:xsd:signaling:3.0" 
+    xmlns:common="urn:cablelabs:iptvservices:esam:xsd:common:1" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <common:BatchInfo batchId="abcd">
+        <common:Source xsi:type="content:MovieType"/>
+    </common:BatchInfo>
+    <ResponseSignal acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="1" signalPointID="1" action="create">
+        <sig:NPTPoint nptPoint="0.000" />
+        <sig:SCTE35PointDescriptor spliceCommandType="06">
+            <sig:SegmentationDescriptorInfo segmentEventId="1" segmentTypeId="52"/>
+        </sig:SCTE35PointDescriptor>
+    </ResponseSignal>
+    <ResponseSignal acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="2" signalPointID="2" action="create">
+        <sig:NPTPoint nptPoint="15.000" />
+        <sig:SCTE35PointDescriptor spliceCommandType="06">
+            <sig:SegmentationDescriptorInfo segmentEventId="2" segmentTypeId="53"/>
+        </sig:SCTE35PointDescriptor>
+    </ResponseSignal>
+    <ResponseSignal acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="3" signalPointID="3" action="create">
+        <sig:NPTPoint nptPoint="75.000" />
+        <sig:SCTE35PointDescriptor spliceCommandType="06">
+            <sig:SegmentationDescriptorInfo segmentEventId="3" segmentTypeId="52"/>
+        </sig:SCTE35PointDescriptor>
+    </ResponseSignal>
+    <ResponseSignal acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="4" signalPointID="4" action="create">
+        <sig:NPTPoint nptPoint="90.000" />
+        <sig:SCTE35PointDescriptor spliceCommandType="06">
+            <sig:SegmentationDescriptorInfo segmentEventId="4" segmentTypeId="53"/>
+        </sig:SCTE35PointDescriptor>
+    </ResponseSignal>
+    <ResponseSignal acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="5" signalPointID="5" action="create">
+        <sig:NPTPoint nptPoint="180.500" />
+        <sig:SCTE35PointDescriptor spliceCommandType="06">
+            <sig:SegmentationDescriptorInfo segmentEventId="5" segmentTypeId="52"/>
+        </sig:SCTE35PointDescriptor>
+    </ResponseSignal>
+    <ResponseSignal acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="6" signalPointID="6" action="create">
+        <sig:NPTPoint nptPoint="EOS" />
+        <sig:SCTE35PointDescriptor spliceCommandType="06">
+            <sig:SegmentationDescriptorInfo segmentEventId="6" segmentTypeId="53"/>
+        </sig:SCTE35PointDescriptor>
+    </ResponseSignal>
+
+    <ConditioningInfo startOffset="PT0.000S" acquisitionSignalIDRef="1" duration="PT15.000S">
+        <Segment>PT15.000S</Segment>
+    </ConditioningInfo>
+    <ConditioningInfo startOffset="PT75.000S" acquisitionSignalIDRef="3" duration="PT15.000S">
+        <Segment>PT15.000S</Segment>
+    </ConditioningInfo>
+    <ConditioningInfo startOffset="PT180.000S" acquisitionSignalIDRef="5" duration="PT15.000S">
+        <Segment>PT15.000</Segment>
+    </ConditioningInfo>
+</SignalProcessingNotification>

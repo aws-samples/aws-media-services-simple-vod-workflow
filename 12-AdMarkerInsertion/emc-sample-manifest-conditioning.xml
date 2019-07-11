@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ManifestConfirmConditionNotification xmlns="http://www.cablelabs.com/namespaces/metadata/xsd/confirmation/2">
+    <ManifestResponse acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="1" duration="PT15.000S" dataPassThrough="true">
+        <SegmentModify>
+            <FirstSegment>
+                <Tag value="#EXT-X-CUE-OUT:15.000"/>
+            </FirstSegment>
+            <LastSegment>
+                <Tag value="#EXT-X-CUE-IN" locality="after" adapt="true"/>
+            </LastSegment>
+        </SegmentModify>
+    </ManifestResponse>
+    <ManifestResponse acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="2"/>
+    <ManifestResponse acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="3" duration="PT15.000S" dataPassThrough="true">
+        <SegmentModify>
+            <FirstSegment>
+                <Tag value="#EXT-X-CUE-OUT:15.000"/>
+            </FirstSegment>
+            <LastSegment>
+                <Tag value="#EXT-X-CUE-IN" locality="after" adapt="true"/>
+            </LastSegment>
+        </SegmentModify>
+    </ManifestResponse>
+    <ManifestResponse acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="4"/>
+    <ManifestResponse acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="5" duration="PT15.000S" dataPassThrough="true">
+        <SegmentModify>
+            <FirstSegment>
+                <Tag value="#EXT-X-CUE-OUT:15.000"/>
+            </FirstSegment>
+            <LastSegment>
+                <Tag value="#EXT-X-CUE-IN" locality="after" adapt="true"/>
+            </LastSegment>
+        </SegmentModify>
+    </ManifestResponse>
+<ManifestResponse acquisitionPointIdentity="TEST_POINT" acquisitionSignalID="6"/>
+</ManifestConfirmConditionNotification>
