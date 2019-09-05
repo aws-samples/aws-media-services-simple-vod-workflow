@@ -68,7 +68,8 @@ In this module, you will create a MediaConvert job that take a single input vide
 
 1. Select Output 1 from the File Output group in the Output Groups section of the Jobs panel to go to the Output settings form for Output 1.
 1. Scroll down to the **Stream settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
-1. 1.  Scroll down to the **Bitrate (bits/s)** box and enter `3000000`.
+1. Change the **Rate control mode** from CBR to **QVBR**.  
+1. Enter `3000000` for the **Max birate (bit/s)**.
 1. Leave all other settings for Output 1 as the default.
 
 #### Job settings section
@@ -116,17 +117,17 @@ At this point, we will test our job settings with just the MP4 output to make su
     ![HLS output settings](../images/mediaconvert-hls-settings.png)
 
 12. Scroll down to the **Stream settings** panel and enter `640` and `360` in the **Resolution (w x h)** box
-13. Scroll down to the **Bitrate (bits/s)** box and enter `1000000`.
+13. Scroll down **Rate Control Mode** and set it to **QVBR**. Set **Max bitrate(bits/s)** box to `1000000`.
 14. Select Output 2 from the Output Groups section Jobs panel to go to the Output settings form for Output 2.
 15. Enter `_540` in the **Name modifier** box
 16. Enter `$dt$` in the **Segment modifier** box.
 17. Scroll down to the **Stream settings** panel and enter `960` and `540` in the **Resolution (w x h)** box
-18. Scroll down to the **Bitrate (bits/s)** box and enter `2000000`.
+18. Scroll down **Rate Control Mode** and set it to **QVBR**. Set **Max bitrate(bits/s)** box to `2000000`.
 19. Select Output 3 from the Output Groups section Jobs panel to go to the Output settings form for Output 3.
 20. Enter `_720` in the **Name modifier** box
 21. Enter `$dt$` in the **Segment modifier** box.
 22. Scroll down to the **Stream settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
-23. Scroll down to the **Bitrate (bits/s)** box and enter `3000000`.
+23. Scroll down **Rate Control Mode** and set it to **QVBR**. Set **Max bitrate(bits/s)** box to `3000000`.
 
 
 
@@ -144,8 +145,8 @@ At this point, we will test our job settings with just the MP4 output to make su
 
 1. Fill in the resulting output S3 path in the **Destination** box.
 1. Select the **Output 1** link from the **Outputs** box to go to the **Output settings** form for Output 1.
-1. Select **No container** from the **Container** dropdown.
-1. Scroll down to the **Stream settings** panel.
+1. Under **Output settings**, select **No container** from the **Container** dropdown.
+1. Scroll down to the **Encoding settings** panel.
 1. Select **Frame Capture to JPEG** from the **Video codec** dropdown.
 1. Enter `1280` and `720` in the **Resolution (wxh)** boxes.
 1. Enter `500` in the **Max captures** box.

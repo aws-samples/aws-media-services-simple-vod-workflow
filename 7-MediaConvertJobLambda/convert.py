@@ -7,7 +7,6 @@ import uuid
 import boto3
 import datetime
 import random
-import urlparse
 
 from botocore.client import ClientError
 
@@ -68,7 +67,7 @@ def handler(event, context):
         print (json.dumps(job, default=str))
 
     except Exception as e:
-        print 'Exception: %s' % e
+        print ('Exception: %s' % e)
         statusCode = 500
         raise
 

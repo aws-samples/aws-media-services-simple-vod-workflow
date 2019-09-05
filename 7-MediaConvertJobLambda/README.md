@@ -1,14 +1,14 @@
 # Automating  MediaConvert Jobs with Lambda
 
-NOTE: Please also see [Workflow-WatchfolderAndNotification](./Workflow-WatchfolderAndNotification/README.md) for a Lambda sample that includes job status notificatins.
+NOTE: Please also see [Workflow-WatchfolderAndNotification](./Workflow-WatchfolderAndNotification/README.md) for a Lambda sample that includes job status notifications.
 
-In this module you'll use Amazon S3 events and Lambda to automatically trigger AWS Elemental MediaConvert jobs. The ability to watch S3 folders and take action on incoming items is a useful automation technique that enables the creation of fully unattended workflows. In our case, the user will place videos in a folder on AWS S3 which will trigger an ingest workflow to convert the video.  We'll use the job definition from the previous modules as the basis for our automated job.  
+In this module, you'll use Amazon S3 events and Lambda to automatically trigger AWS Elemental MediaConvert jobs. The ability to watch S3 folders and take action on incoming items is a useful automation technique that enables the creation of fully unattended workflows. In our case, the user will place videos in a folder on AWS S3 which will trigger an ingest workflow to convert the video.  We'll use the job definition from the previous modules as the basis for our automated job.  
 
 ![Serverless transcoding architecture](../images/simple-watchfolder.png)
 
 You'll implement a Lambda function that will be invoked each time a user uploads a video.  The lambda will send the video to the MediaConvert service to produce several outputs:
 
-- An Apple HLS adaptive bitrate stream for playout on multiple sized devices and varying bandwiths.
+- An Apple HLS adaptive bitrate stream for playout on multiple sized devices and varying bandwidths.
 - An MP4 stream
 - Thumbnails for use in websites to show a preview of the video at a point in time.
 
@@ -142,7 +142,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 1. Choose the **Author from scratch** button.
 
 1. On the **Author from Scratch** panel, enter `VODLambdaConvert` in the **Name** field.
-2. Select **Python 2.7** for the **Runtime**.
+2. Select **Python 3.7** for the **Runtime**.
 
 1. Choose **Use and existing role** from the Role dropdown.
 
@@ -152,17 +152,10 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
     ![Create Lambda convert function screenshot](../images/lambda-convert-author.png)
 
-1. Create a zip file containing the lambda code and JSON job settings.  In a terminal, navigate to the directory where you cloned this git repository and zip the code for the lambda.
-
-```
-cd aws-mediaservices-simple-vod-workflow/7-MediaConvertJobLambda
-zip -r lambda.zip convert.py job.json
-```
-
 1. On the Configuration tab of the VODLambdaConvert page, in the  **function code** panel:  
 
-    1. Select **Upload a zip file** for the **Code entry type**
-    2. Click **Upload** and select the zip file you created in the previous step from the dialog box. 
+    1. Select **Upload a file from Amazon S3** for the **Code entry type**
+    1. Enter the following for the URL: `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/lambda.zip`
 
     1. Enter `convert.handler` for the **Handler** field.
 
@@ -170,14 +163,12 @@ zip -r lambda.zip convert.py job.json
 
 1. On the **Environment Variables** panel of the VODLambdaConvert page, enter the following keys and values:
 
-    1. DestinationBucket = vod-site-firstname-lastname (or whatever you named your static S3 website bucket in module 1)
-    1. MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/VODMediaConvertRole
+    * DestinationBucket = vod-lastname (or whatever you named your bucket in module 1)
+    * MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/VODMediaConvertRole
 
     ![Lambda function code screenshot](../images/lambda-environment.png)
 
-1. On the  **Basic Settings** panel, enter the following: 
-    
-    1. Timeout = 2 min
+1. On the  **Basic Settings** panel, set **Timeout** to 2 minutes.
 
 1. Scroll back to the top of the page and click on the **Save** button.
 
@@ -230,8 +221,8 @@ zip -r lambda.zip convert.py job.json
     }
     ```
 
-1. Choose **Save and test**.
-
+1. Click on **Save** button. 
+1. Then back on the main page, click on **Test** button.
 1. Verify that the execution succeeded and that the function result looks like the following:
 ```JSON
 {
@@ -256,16 +247,14 @@ Use the AWS Lambda console to add a putItem trigger from the `vod-watchfolder-fi
 
 #### Step-by-step instructions
 
-1. In the **Configuration->Designer** panel of the VODLambdaConvert function:
-    1. Click on **S3* under **Add triggers**
+1. In the **Configuration->Designer** panel of the VODLambdaConvert function, click on **Add trigger** button. 
+1. Select **S3** from the **Trigger configuration** dropdown.
+1. Select `vod-watchfolder-firstname-lastname` or the name you used for the watchfolder bucket you created earlier in this module for the **Bucket**.
+1. Select **PUT** for the **Event type**.
 
-    ![Lambda trigger screenshot](../images/lambda-s3-trigger.png)
+    ![Lambda S3 trigger](../images/lambda-s3-trigger.png)
 
-1. Scroll down to the **Configure triggers** panel:
-  
-    1. Select `vod-watchfolder-firstname-lastname` or the name you used for the watchfolder bucket you created earlier in this module for the **Bucket**.
-    2. Select **PUT** for the **Event type**.
-    3. Leave the rest of the settings as the default and click the **Add** button.
+1. Leave the rest of the settings as the default and click the **Add** button.
 
     ![Lambda trigger configuration screenshot](../images/lambda-trigger-confgure.png)
 
