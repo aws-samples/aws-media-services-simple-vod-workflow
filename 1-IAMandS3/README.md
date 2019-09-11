@@ -36,17 +36,19 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
 
 1. From the AWS Management Console, click on **Services** and then select **IAM** in the Security, Identity & Compliance section.
 
-2. Select **Roles** in the left navigation bar and then choose **Create new role**.
+1. Select **Roles** in the left navigation bar and then choose **Create new role**.
 
-3. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
+1. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
 
     **Note:** Selecting a role type automatically creates a trust policy for your role that allows AWS services to assume this role on your behalf. If you were creating this role using the CLI, AWS CloudFormation or another mechanism, you would specify a trust policy directly.
 
-4. Choose **Next:Review**.
+1. Click on **Next:Tags**. 
 
-5. Enter `vod-MediaConvertRole` for the **Role name**.
+1. Click on **Next:Review**.
 
-6. Choose **Create role**.
+1. Enter `vod-MediaConvertRole` for the **Role name**.
+
+1. Choose **Create role**.
 
 ## 2. Create an S3 bucket to store and host MediaConvert outputs
 

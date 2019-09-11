@@ -99,7 +99,7 @@ Resources:
         Variables:
           DestinationBucket: !Ref MediaBucket
           MediaConvertRole: !Ref MediaConvertRoleArn
-      Runtime:  python2.7
+      Runtime:  python3.7
       Timeout: 120
 
 Outputs:

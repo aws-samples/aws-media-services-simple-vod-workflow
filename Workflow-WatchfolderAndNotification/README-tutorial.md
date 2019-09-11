@@ -3,13 +3,13 @@
 A watchfolder is a common method for automating video ingest and delivery workflows.  Users with video ready for delivery upload their files to a known storage location.  The upload automatically triggers an ingest workflow that converts the video to formats suitable for delivery and stores them in the cloud for on-demand viewing.   The Serverless Video Conversion Watchfolder Workflow solves this problem by using [Amazon S3](https://aws.amazon.com/s3), [AWS Lambda](https://aws.amazon.com/lambda/), [AWS MediaConvert](https://aws.amazon.com/mediaconvert/), [Amazon CloudWatch Events](https://aws.amazon.com/cloudwatch) and [Amazon Simple Notification Service](https://aws.amazon.com/sns).
 
 The workflow will create the following outputs for each video uploaded to the WatchFolder S3 bucket /inputs folder:
-- An Apple HLS adaptive bitrate stream for playout on multiple sized devices and varying bandwiths.
+- An Apple HLS adaptive bitrate stream for playout on multiple sized devices and varying bandwidths
 - An MP4 stream
 - Thumbnail images collected at intervals
 
-This tutorial lets you learn about the workflow in-depth by creating the lambda and related resources in the AWS console.  There is a companion [AWS CloudFormation](https://aws.amazon.com/cloudformation/) template for creating the lambda function and related resources automatically.  To run the automated template, follow the instructions in [README.md](./README.md).  
+This tutorial lets you learn about the workflow in-depth by creating the Lambda and related resources in the AWS console.  There is a companion [AWS CloudFormation](https://aws.amazon.com/cloudformation/) template for creating the :ambda function and related resources automatically.  To run the automated template, follow the instructions in [README.md](./README.md).  
 
-To see some of the other powerful broadcast grade encoding features of AWS Elemental MediaConvert check out the getting started page [here](https://aws.amazon.com/mediaconvert/)
+To see some of the other powerful broadcast grade encoding features of AWS Elemental MediaConvert check out the getting started page [here](https://aws.amazon.com/mediaconvert/).
 
 ![screenshot for instruction](../images/WatchfolderSlide.png)
 
@@ -25,6 +25,8 @@ Each of the following sections provide an implementation overview and detailed, 
 
 ## 1. Create an Amazon S3 bucket to use for uploading videos to be converted
 
+**If you have a previously stepped through the [IAM and S3 module](../1-IAMandS3/README.md), then you may skip this section but note the name of the S3 bucket that you created in that module.**
+
 Use the console or AWS CLI to create an Amazon S3 bucket. Keep in mind that your bucket's name must be globally unique across all regions and customers. We recommend using a name like `vod-watchfolder-firstname-lastname`. If you get an error that your bucket name already exists, try adding additional numbers or characters until you find an unused name.
 
 1. In the AWS Management Console choose **Services** then select **S3** under Storage.
@@ -39,7 +41,7 @@ Use the console or AWS CLI to create an Amazon S3 bucket. Keep in mind that your
 
     ![Create source bucket screenshot](../images/s3-create-watchfolder.png)
 
-## 1. Create an Amazon S3 bucket to use for storing converted video outputs from MediaConvert
+## 2. Create an Amazon S3 bucket to use for storing converted video outputs from MediaConvert
 
 In this section, you will use the AWS console to create an S3 bucket to store video and image outputs from MediaConvert.  Later, the resulting videos and images will be played out using the S3 https resource using several different players both inside and outside of the the amazonaws domain.  
 
@@ -60,7 +62,7 @@ In order to facilitate https access from anonymous sources inside and outside th
 
 1. Choose **Create** in the lower left of the dialog without selecting a bucket to copy settings from.
 
-1. From the S3 console select the bucket you just created and go to the Overview page.
+1. From the S3 console click on the bucket you just created and go to the **Overview** page.
 
 1. Select the **Properties** tab and click on the **Static website hosting** tile.  
 
@@ -74,7 +76,7 @@ In order to facilitate https access from anonymous sources inside and outside th
 
 1. Select **Bucket policy** and paste the following JSON into the bucket policy editor.
 
-1. Replace the text **YOUR-BUCKETNAME** with the name of the bucket you created earlier in this module.
+1. Replace the text **YOUR-BUCKETNAME** with the name of the bucket you just created (eg. `vod-mediabucket`).
 
     ```
     {
@@ -92,7 +94,7 @@ In order to facilitate https access from anonymous sources inside and outside th
     ```
 1. Click on **Save**
 
-1. Next, click on **CORS configruation** and replace the default XML with the following XML in the **CORS configuration editor**.
+1. Next, click on **CORS configuration** and replace the default XML with the following XML in the **CORS configuration editor**.
     ```
     <?xml version="1.0" encoding="UTF-8"?>
     <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
@@ -107,14 +109,16 @@ In order to facilitate https access from anonymous sources inside and outside th
 1. Click on the **Save** button
 
 ## 3. Create an IAM Role to Pass to MediaConvert
+**If you have a previously stepped through the IAM and S3 module, then you may skip this section but note the role ARN you had created in that module.**
 
 #### Background
 
 MediaConvert will will need to be granted permissions to read and write files from your S3 buckets and generate CloudWatch events as it processes videos.  MediaConvert is granted the permissions it needs by assuming a role that is passed to it along with trancoding jobs. 
 
+
 #### High-Level Instructions
 
-Use the IAM console to create a new role. Name it `MediaConvertRole` and select AWS Lambda for the role type. Use inline policies to grant permissions to other resources needed for the lambda to execute.
+Use the IAM console to create a new role. Name it `MediaConvertRole` and select AWS Lambda for the role type. Use inline policies to grant permissions to other resources needed for the Lambda to execute.
 
 #### Step-by-step instructions 
 
@@ -122,24 +126,25 @@ Use the IAM console to create a new role. Name it `MediaConvertRole` and select 
 
 1. Select **Roles** in the left navigation bar and then choose **Create role**.
 
-1. Select **AWS Service** and **MediaConvert** for the role type, choose **MediaConvert** as the use case, then click on the **Next:Permissions** button.
+1. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
 
     **Note:** Selecting a role type automatically creates a trust policy for your role that allows AWS services to assume this role on your behalf. If you were creating this role using the CLI, AWS CloudFormation or another mechanism, you would specify a trust policy directly.
 
-1. Choose **Next:Review**.
+1. Click on **Next:Tags**. 
 
-1. Enter `MediaConvertRole` for the **Role name**.
+1. Click on **Next:Review**.
+
+1. Enter `vod-MediaConvertRole` for the **Role name**.
 
 1. Choose **Create role**.
-
 
 1. Type `MediaConvertRole` into the filter box on the Roles page and choose the role you just created.  Your role should look like this.
 
     ![MediaConvert Role](../images/iam-role-mediaconvert.png)
 
-1. Save the ARN for use later
+1. Note the Role ARN. You will need this later.
 
-## 2. Create an IAM Role for Your Lambda function
+## 4. Create an IAM Role for Your Lambda function
 
 #### Background
 
@@ -151,7 +156,7 @@ Use the IAM console to create a role. Name it `VODLambdaRole` and select AWS Lam
 
 Attach the managed policy called `AWSLambdaBasicExecutionRole` to this role to grant the necessary CloudWatch Logs permissions. 
 
-Use inline policies to grant permissions to other resources needed for the lambda to execute.
+Use inline policies to grant permissions to other resources needed for the Lambda to execute.
 
 #### Step-by-step instructions
 
@@ -159,13 +164,19 @@ Use inline policies to grant permissions to other resources needed for the lambd
 
 1. Select **Roles** in the left navigation bar and then choose **Create role**.
 
-1. Select **AWS Service** and **Lambda** for the role type, then click on the **Next:Permissions** button.
+1. Select **AWS Service** for the **type of trusted entity**.
+
+1. Select **Lambda** for the **service that will use this role**.
+
+1. Click on the **Next:Permissions** button.
 
     **Note:** Selecting a role type automatically creates a trust policy for your role that allows AWS services to assume this role on your behalf. If you were creating this role using the CLI, AWS CloudFormation or another mechanism, you would specify a trust policy directly.
 
 1. Begin typing `AWSLambdaBasicExecutionRole` in the **Filter** text box and check the box next to that role.
 
-1. Choose **Next:Review**.
+1. Click on **Next:Tags**.
+
+1. Click on **Next:Review**.
 
 1. Enter `VODLambdaRole` for the **Role name**.
 
@@ -173,72 +184,72 @@ Use inline policies to grant permissions to other resources needed for the lambd
 
 1. Type `VODLambdaRole` into the filter box on the Roles page and choose the role you just created.
 
-1. On the Permissions tab, expand the **Add Inline Policies** section and choose the **JSON** tab.
+1. On the Permissions tab, click on the **Add Inline Policies** link and choose the **JSON** tab.
 
 1. Copy and paste the following JSON in the **Policy Document Box**.  You will need to edit this policy in the next step to fill in the resources for your application.
-
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
+    ```JSON        
         {
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "*",
-            "Effect": "Allow",
-            "Sid": "Logging"
-        },
-        {
-            "Action": [
-                "iam:PassRole"
-            ],
-            "Resource": [
-                "ARNforMediaConvertRole"
-            ],
-            "Effect": "Allow",
-            "Sid": "PassRole"
-        },
-        {
-            "Action": [
-                "mediaconvert:*"
-            ],
-            "Resource": [
-                "*"
-            ],
-            "Effect": "Allow",
-            "Sid": "MediaConvertService"
-        },
-        {
-            "Action": [
-                "s3:*"
-            ],
-            "Resource": [
-                "*"
-            ],
-            "Effect": "Allow",
-            "Sid": "S3Service"
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": [
+                        "logs:CreateLogGroup",
+                        "logs:CreateLogStream",
+                        "logs:PutLogEvents"
+                    ],
+                    "Resource": "*",
+                    "Effect": "Allow",
+                    "Sid": "Logging"
+                },
+                {
+                    "Action": [
+                        "iam:PassRole"
+                    ],
+                    "Resource": [
+                        "ARNforMediaConvertRole"
+                    ],
+                    "Effect": "Allow",
+                    "Sid": "PassRole"
+                },
+                {
+                    "Action": [
+                        "mediaconvert:*"
+                    ],
+                    "Resource": [
+                        "*"
+                    ],
+                    "Effect": "Allow",
+                    "Sid": "MediaConvertService"
+                },
+                {
+                    "Action": [
+                        "s3:*"
+                    ],
+                    "Resource": [
+                        "*"
+                    ],
+                    "Effect": "Allow",
+                    "Sid": "S3Service"
+                }
+            ]
         }
-    ]
-}
-```
-1. Replace the ARNforMediaConvertRole tag in the policy with the ARN for the VODMMediaConvertRole you created earlier.
+    ```
+        
+1. Replace the `ARNforMediaConvertRole` tag in the policy with the ARN for the VODMMediaConvertRole you created earlier.
 
-2. Click on the **Review Policy** button.
+1. Click on the **Review Policy** button.
 
 1. Enter `VODLambdaPolicy` in the **Policy Name** box.
 
 1. Click on the **Create Policy** button.
 
-## 3. Create a lambda Function for converting videos
+## 5. Create a Lambda function for converting videos
 
 #### Background
 
-AWS Lambda will run your code in response to events such as a putObject into S3 or an HTTP request. In this step you'll build the core function that will process videos using the MediaConvert python SDK. The lambda function will respond to putObject events in your S3 WatchFolder bucket.  Whenever a video file is added to the /inputs folder, the lambda will start a MediaConvert job.
+AWS Lambda will run your code in response to events such as a putObject into S3 or an HTTP request. In this step you'll build the core function that will process videos using the MediaConvert python SDK. The Lambda function will respond to putObject events in your S3 WatchFolder bucket.  Whenever a video file is added to the **/inputs** folder, the Lambda will start a MediaConvert job.
 
-This lambda will submit a job to MediaConvert, but it won't wait for the job to complete.  In PART 2 of this tutorial, you'll use CloudWatch events to automatically monitor your MediaConvert jobs and notify you when they finish.
+This Lambda will submit a job to MediaConvert, but it won't wait for the job to complete.  In PART 2 of this tutorial, you'll use CloudWatch events to automatically monitor your MediaConvert jobs and notify you when they finish.
 
 #### High-Level Instructions
 
@@ -255,7 +266,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 1. Choose the **Author from scratch** button.
 
 1. On the **Author from Scratch** panel, enter `VODLambdaConvert` in the **Name** field.
-2. Select **Python 2.7** for the **Runtime**.
+2. Select **Python 3.7** for the **Runtime**.
 
 1. Choose **Use and existing role** from the Role dropdown.
 
@@ -265,37 +276,29 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
     ![Create Lambda convert function screenshot](../images/lambda-convert-author.png)
 
-1. Create a zip file containing the lambda code and JSON job settings.  In a terminal, navigate to the directory where you cloned this git repository and zip the code for the lambda.
-
-    ```
-    cd ElementalTechMarketingVODTools/1A-MediaConvert-watchfolder
-    zip -r lambda.zip convert.py job.json
-    ```
-
 1. On the Configuration tab of the VODLambdaConvert page, in the  **function code** panel:  
 
-    1. Select **Upload a zip file** for the **Code entry type**
-    2. Click **Upload** and select the zip file you created in the previous step from the dialog box. 
+    1. Select **Upload a file from Amazon S3** for the **Code entry type**
+    1. Enter the following for the URL: `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodtk/1a-mediaconvert-watchfolder-lambda.zip`
 
     1. Enter `convert.handler` for the **Handler** field.
 
-        ![Lambda function code screenshot](../images/lambda-function-code.png)
+        ![Lambda function code screenshot](../images/lambda-function-code-wfnotification.png)
+
 
 1. On the **Environment Variables** panel of the VODLambdaConvert page, enter the following keys and values:
 
     1. DestinationBucket = vod-mediabucket-firstname-lastname (or whatever you named your S3 MediaBucket bucket)
     1. MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/MediaConvertRole (or whatever you named your role to pass to MediaConvert)
-    2. Application = VOD
+    1. Application = VOD
 
     ![Lambda function code screenshot](../images/lambda-environment.png)  
 
-1. On the  **Basic Settings** panel, enter the following: 
-    
-    1. Timeout = 2 min
+1. On the  **Basic Settings** panel, set **Timeout** to 2 min.
 
 1. Scroll back to the top of the page and click on the **Save** button.
 
-## Test the lambda
+## 6. Test the Lambda
 
 1. From the main console screen for your function, select the dropdown that says **_Select a test event..._**  and choose **Configure test event**.
 
@@ -343,47 +346,42 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
     ```
 
 1. Enter `ConvertTest` in the **Event name** box
-2. Choose **Save and test** to run the test.
-
+1. Click on **Save** button. 
+1. Then back on the main page, click on **Test** button.
 1. Verify that the execution succeeded and that the function result looks like the following:
-```JSON
-{
-  "body": "{}",
-  "headers": {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/json"
-  },
-  "statusCode": 200
-}
-```
+    ```JSON
+    {
+    "body": "{}",
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+    },
+    "statusCode": 200
+    }
+    ```
 
-## 6. Create a S3 Event Trigger for your Convert lambda
+## 7. Create a S3 Event Trigger for your Convert Lambda
 
 #### Background
 
-In the previous step, you built a lambda function that will convert a video in response to an S3 PutItem event.  Now it's time to hook up the Lambda trigger to the watchfolder S3 bucket.  We want to run the lambda whenever someone uploads a new object to the S3 bucket, so we will use PutItem operations as our Lambda trigger.
-
-Note: S3 supports Lambda triggers directly, so we configure the Lambda trigger in S3.  Other services may emit events, but don't have a direct trigger.  In this case, we would use CloudWatch Rules as the event source rather than the service that emitted the event.
+In the previous step, you built a Lambda function that will convert a video in response to an S3 PutItem event.  Now it's time to hook up the Lambda trigger to the watchfolder S3 bucket.  We want to run the Lambda whenever someone uploads a new object to the S3 bucket, so we will use PutItem operations as our Lambda trigger.
 
 #### High-Level Instructions
 
-Use the AWS Lambda console to add a putItem trigger from the `vod-watchfolder-firstname-lastname` S3 bucket to the `VODLambdaConvert` lambda.  
+Use the AWS Lambda console to add a putItem trigger from the `vod-watchfolder-firstname-lastname` S3 bucket to the `VODLambdaConvert` Lambda.  
 
 #### Step-by-step instructions
 
-1. In the **Configuration->Designer** panel of the VODLambdaConvert function:
-    1. Click on **S3* under **Add triggers**
+1. In the **Configuration->Designer** panel of the VODLambdaConvert function, click on **Add trigger** button. 
+1. Select **S3** from the **Trigger configuration** dropdown.
+1. Select `vod-watchfolder-firstname-lastname` or the name you used for the watchfolder bucket you created earlier in this module for the **Bucket**.
+1. Select **PUT** for the **Event type**.
 
-    ![Lambda trigger screenshot](../images/lambda-s3-trigger.png)
+    ![Lambda S3 trigger](../images/lambda-s3-trigger.png)
+1. Enter `inputs/` for the **Prefix**
+1. Leave the rest of the settings as the default and click the **Add** button.
 
-1. Scroll down to the **Configure triggers** panel:
-  
-    1. Select `vod-watchfolder-firstname-lastname` or the name you used for the watchfolder bucket you created earlier in this module for the **Bucket**.
-    2. Select **PUT** for the **Event type**.
-    3. Enter `inputs/` for the **Prefix**
-    3. Leave the rest of the settings as the default and click the **Add** button.
-
-        ![Lambda trigger configuration screenshot](../images/lambda-trigger-confgure.png)
+    ![Lambda trigger configuration screenshot](../images/lambda-trigger-confgure.png)
 
 
 ## Test the watchfolder automation
@@ -394,27 +392,30 @@ In the next module of this lab, we will setup automated monitoring of jobs creat
 
 1. Open the S3 console overview page for the watchfolder S3 bucket you created earlier.
 
-2. Select the **Create folder** button and name it `inputs`, then click on **Save**.
+1. Select the **Create folder** button and name it `inputs`, then click on **Save**.
 
-3. Open the **inputs** folder by clicking on the link.
+1. Open the **inputs** folder by clicking on the link.
 
 1. Select **Upload** and then choose the file `test.mp4` from the directory for this lab module on your computer.
 
 1. Click on the **Upload** button.
 
-2. Note the time that the upload completed.
+1. Note the time that the upload completed.
 
 1. Open the MediaConvert jobs page and find a job for the input 'test.mp4' that was started near the time your upload completed.  
 
     ![Lambda trigger configuration screenshot](../images/verify-watchfolder.png)
 
-1. Click on the jobId link to open the job details page.
+1. Click on the jobId link to open the job summary page.
 
-2. Click on the link for the MP4 or HLS output (depending on what is supported by your browser).  This will take you to the S3 folder where your output is located.
+1. Click on the link for the MP4 or HLS output (depending on what is supported by your browser).  This will take you to the S3 folder where your output is located.
+    
+    ![Job summary page](../images/mediaconvert-job-summary.png)
 
-3. Click on the ouput object link.
 
-4. Play the test video by clicking on the S3 object http resource listed under the **Link** label.
+1. Click on the ouput object link.
+
+1. Play the test video by clicking on the S3 object http resource listed under the **Link** label.
 
     ![test video](../images/play-test-video.png)
 
@@ -436,20 +437,22 @@ Create an SNS topic called `VODNotification` that uses the Email protocol to sen
 #### Step-by-step instructions
 
 1. Go to the SNS service console.
-2. Click on **Create topic**
-3. Enter `VODNotification` for the **Topic name**.
-4. Enter `WFNotify` for the **Display name**.
-5. Cick on **Create topic**
+1. Click on the **Topics** link on the left side-bar menu.
+1. Click on the **Create topic** button.
+1. Enter `VODNotification` for the **Topic name**.
+1. Enter `WFNotify` for the **Display name**.
+1. Cick on **Create topic**
 
     ![create topic](../images/sns-create-topic.png)
 
-6. Click on **Create subscription**.
-7. Select `Email` from the **Protocol** drop-down.
-8. Enter the email address you want to use to recieve notification in the **Endpoint** box.
-9. Click on **Create subscription** button.
-10. Check the e-mail box you specified above for a confirmation e-mail.  Click on the link to confirm the subscription.
+1. Under the newly created notification's **Subscriptions** tab, click on **Create subscription**.
+1. Select `Email` from the **Protocol** drop-down.
+1. Enter the email address you want to use to recieve notification in the **Endpoint** box.
+1. Click on **Create subscription** button.
 
     ![create subscription](../images/sns-subsciption.png)
+
+1. Check the inbox of the email address you specified above for a confirmation e-mail.  Click on the link to confirm the subscription.
 
 ## 2. Create a CloudWatch Event Rule to monitor the status of MediaConvert jobs
 
@@ -469,23 +472,23 @@ Cloudwatch event rules create a mapping between event patterns and target action
 
     ```
     {
-    "source": [
-        "aws.mediaconvert"
-    ],
-    "detail-type": [
-        "MediaConvert Job State Change"
-    ],
-    "detail": {
-        "status": [
-        "COMPLETE",
-        "ERROR"
+        "source": [
+            "aws.mediaconvert"
         ],
-    "userMetadata": {
-        "application": [
-            "VOD"
-        ]
+        "detail-type": [
+            "MediaConvert Job State Change"
+        ],
+        "detail": {
+            "status": [
+                "COMPLETE",
+                "ERROR"
+            ],
+            "userMetadata": {
+                "application": [
+                    "VOD"
+                ]
+            }
         }
-    }
     }
     ```
 4. Click **Save**.
@@ -506,114 +509,25 @@ Cloudwatch event rules create a mapping between event patterns and target action
     {"jobId":"$.detail.jobId","settings":"$.detail.userMetadata.input","application":"$.detail.userMetadata.application","status":"$.detail.status"}
     ```
 
-11. Enter the following string in the **Input Template** box:
+11. Enter the following string in the **Input Template** box. If you're working through this tutorial in a region other than us-west-2, update the region in this template accordingly.
 
     ```
-    "Job <jobId> finished with status <status>. Job details: https://<region>.console.aws.amazon.com/mediaconvert/home?region=<region>#/jobs/summary/<jobId>"
+    "Job <jobId> finished with status <status>. Job details: https://us-west-2.console.aws.amazon.com/mediaconvert/home?region=us-west-2#/jobs/summary/<jobId>"
     ```
 
 12. Click the **Configure details** button to go to the next page.
 
     ![event rule](../images/cw-event-rule.png)
-13. Enter `VODNotifyEventRule` in the **Name** box and click on **Create rule**
 
-## 3. Add a policy to allow CloudWatch rules to add to the SNS Topic
-
-#### Background
-
-When the VODNotifyEventRule matches a COMPLETE or ERROR event from MediaConvert, it needs to publish the transformed event to SNS.  This SNS Topic Policy gives permission to CloudWatch Events service to publish SNS notifications in this account.
-
-#### Step-by-step instructions
-
-1. Open the SNS console.
-
-2. Find the policy you created earlier, VODNotification, and click on the link to go to the detail page.
-
-3. Select **Edit topic policy** on the **Other topic actions** drop-down menu.
-
-4. On the **Advanced view** tab, edit the policy JSON by adding the following statement.  
-    1. Replace the ARN with the ARN for this Topic.
-        1. Add this JSON fragment to the begining of the list object.  Right after the line that says **"Statement": [**.
-
-    ```
-    {
-      "Sid": "TrustCWEToPublishEventsToMyTopic",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "events.amazonaws.com"
-      },
-      "Action": "sns:Publish",
-      "Resource": "ARN"
-    },
-    ```
-4. Click on **Update policy**
-
-5. The new policy should look like this:
-
-    ```
-    {
-    "Version": "2008-10-17",
-    "Id": "__default_policy_ID",
-    "Statement": [
-        {
-        "Sid": "TrustCWEToPublishEventsToMyTopic",
-        "Effect": "Allow",
-        "Principal": {
-            "Service": "events.amazonaws.com"
-        },
-        "Action": "sns:Publish",
-        "Resource": "ARN"
-        },
-        {
-        "Sid": "__default_statement_ID",
-        "Effect": "Allow",
-        "Principal": {
-            "AWS": "*"
-        },
-        "Action": [
-            "SNS:Publish",
-            "SNS:RemovePermission",
-            "SNS:SetTopicAttributes",
-            "SNS:DeleteTopic",
-            "SNS:ListSubscriptionsByTopic",
-            "SNS:GetTopicAttributes",
-            "SNS:Receive",
-            "SNS:AddPermission",
-            "SNS:Subscribe"
-        ],
-        "Resource": "arn:aws:sns:us-west-2:ACCOUNT:vod-notification",
-        "Condition": {
-            "StringEquals": {
-            "AWS:SourceOwner": "ACCOUNT"
-            }
-        }
-        },
-        {
-        "Sid": "__console_sub_0",
-        "Effect": "Allow",
-        "Principal": {
-            "AWS": "*"
-        },
-        "Action": [
-            "SNS:Subscribe",
-            "SNS:Receive"
-        ],
-        "Resource": "arn:aws:sns:us-west-2:ACCOUNT:vod-notification"
-        }
-        
-    ]
-    }
-    ```
-
+13. Enter `VODNotifyEventRule` in the **Name** box and click on **Create rule**.
 
 ## Test notifications
 
 1. Go to the S3 console and open the detail page for the WatchFolder bucket you created earlier.  
-2. Open the inputs/ folder.
-3. Delete the test video you uploaded earlier.
-4. Upload test.mp4 again
-5. Repeat the verification steps you did for PART 1.
-5. When the job finished, check the email you used to setup the workflow.  You should have a message similar to this:
+1. Open the **inputs/** folder.
+1. Upload test.mp4 again.
+1. Repeat the verification steps you did for PART 1.
+1. When the job finished, check the email you used to setup the workflow.  You should have a message similar to this:
 
     ![sns email](../images/sns-email.png)
 

@@ -7,7 +7,7 @@ import uuid
 import boto3
 import datetime
 import random
-from urlparse import urlparse
+from urllib.parse import urlparse
 import logging
 
 from botocore.client import ClientError

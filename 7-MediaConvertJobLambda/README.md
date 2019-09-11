@@ -165,6 +165,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
     * DestinationBucket = vod-lastname (or whatever you named your bucket in module 1)
     * MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/VODMediaConvertRole
+    * Application = VOD
 
     ![Lambda function code screenshot](../images/lambda-environment.png)
 
@@ -220,7 +221,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
     ]
     }
     ```
-
+1. Enter `ConvertTest` in the **Event name** box.
 1. Click on **Save** button. 
 1. Then back on the main page, click on **Test** button.
 1. Verify that the execution succeeded and that the function result looks like the following:

@@ -155,7 +155,7 @@ Resources:
           DestinationBucket: !Ref MediaBucket
           MediaConvertRole: !GetAtt MediaConvertRole.Arn
           Application: !Sub "${AWS::StackName}"
-      Runtime:  python2.7
+      Runtime:  python3.7
       Timeout: 120
   
   MediaBucket:

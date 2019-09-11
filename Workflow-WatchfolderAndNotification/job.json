@@ -56,9 +56,12 @@
                   "TemporalAdaptiveQuantization": "ENABLED",
                   "FlickerAdaptiveQuantization": "DISABLED",
                   "EntropyEncoding": "CABAC",
-                  "Bitrate": 1000000,
+                  "MaxBitrate": 1000000,
                   "FramerateControl": "INITIALIZE_FROM_SOURCE",
-                  "RateControlMode": "CBR",
+                  "RateControlMode": "QVBR",
+                  "QvbrSettings": {
+                    "QvbrQualityLevel": 7
+                  },
                   "CodecProfile": "MAIN",
                   "Telecine": "NONE",
                   "MinIInterval": 0,
@@ -163,9 +166,12 @@
                   "TemporalAdaptiveQuantization": "ENABLED",
                   "FlickerAdaptiveQuantization": "DISABLED",
                   "EntropyEncoding": "CABAC",
-                  "Bitrate": 2000000,
+                  "MaxBitrate": 2000000,
                   "FramerateControl": "INITIALIZE_FROM_SOURCE",
-                  "RateControlMode": "CBR",
+                  "RateControlMode": "QVBR",
+                  "QvbrSettings": {
+                    "QvbrQualityLevel": 7
+                  },
                   "CodecProfile": "MAIN",
                   "Telecine": "NONE",
                   "MinIInterval": 0,
@@ -270,9 +276,12 @@
                   "TemporalAdaptiveQuantization": "ENABLED",
                   "FlickerAdaptiveQuantization": "DISABLED",
                   "EntropyEncoding": "CABAC",
-                  "Bitrate": 3000000,
+                  "MaxBitrate": 3000000,
                   "FramerateControl": "INITIALIZE_FROM_SOURCE",
-                  "RateControlMode": "CBR",
+                  "RateControlMode": "QVBR",
+                  "QvbrSettings": {
+                    "QvbrQualityLevel": 7
+                  },
                   "CodecProfile": "MAIN",
                   "Telecine": "NONE",
                   "MinIInterval": 0,
@@ -382,9 +391,12 @@
                   "TemporalAdaptiveQuantization": "ENABLED",
                   "FlickerAdaptiveQuantization": "DISABLED",
                   "EntropyEncoding": "CABAC",
-                  "Bitrate": 3000000,
+                  "MaxBitrate": 3000000,
                   "FramerateControl": "INITIALIZE_FROM_SOURCE",
-                  "RateControlMode": "CBR",
+                  "RateControlMode": "QVBR",
+                  "QvbrSettings": {
+                    "QvbrQualityLevel": 7
+                  },
                   "CodecProfile": "MAIN",
                   "Telecine": "NONE",
                   "MinIInterval": 0,
