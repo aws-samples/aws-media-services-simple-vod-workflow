@@ -3,6 +3,8 @@ AWS Elemental MediaPackage can now package, encrypt, and originate on-demand vid
 
 In this tutorial, we walk you through ingesting an HLS asset you have transcoded through MediaConvert for further packaging in a more automated fashion. You will do this by first subscribing to the MediaConvert job completion event notification through CloudWatch. You then use a Lambda to process that CloudWatch event notification and create a MediaPackage VOD asset based on the HLS output of the MediaConvert job.
 
+If you'd like to see how you would ingest an HLS asset through the MediaPackage console without the use of Lambdas, then follow [this other tutorial](README-tutorial.md).
+
 ## Assumptions and Prerequisites
 * Completion of [MediaConvert Jobs](../2-MediaConvertJobs/README.md) or [MediaConvert Jobs via WatchFolder](../7-MediaConvertJobLambda/README.md).
 
