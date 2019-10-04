@@ -132,7 +132,7 @@ To make sure that the assets are actually working, play back the various endpoin
     ![alt](../images/emp-vod-asset-details.png)
 
 1. Copy the first playback URL. 
-1. Navigate to `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/reinvent2019/player.html`
+1. Navigate to `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/reinvent2019/vodplayer.html`
 1. Paste the URL you copied on to the Custom URL textbox and hit the Preview button.
 1. Preview the rest of the endpoints. 
 

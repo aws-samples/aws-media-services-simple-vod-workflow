@@ -49,7 +49,7 @@ We will use a demo player to play back the various endpoints created by MediaPac
 1. You should find the endpoints created by MediaPackage under **Playback details**. There should be one endpoint for each of the configuration you set up in your packaging group. 
     ![alt](../images/emp-vod-playback-details.png)
 1. Copy the URL of the first ingest endpoint. 
-1. Navigate to `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/reinvent2019/player.html`
+1. Navigate to `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/reinvent2019/vodplayer.html`
 1. Paste the URL you copied on to the Custom URL textbox and hit the Preview button.
 1. Preview the rest of the endpoints. 
 
