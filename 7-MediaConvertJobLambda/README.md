@@ -20,7 +20,7 @@ Each of the following sections provide an implementation overview and detailed, 
 
 A CloudFormation template is provided for this module in the file `WatchFolder.yaml`, if you would prefer to build the automated workflow automatically. **Note:** Run the CloudFormation template in us-west-2.
 
-### 1. Create an Amazon S3 bucket to use for uploading videos to be converted
+### [1. Create an Amazon S3 bucket to use for uploading videos to be converted](#watchfolder-bucket)
 
 Use the console or AWS CLI to create an Amazon S3 bucket. Keep in mind that your bucket's name must be globally unique across all regions and customers. We recommend using a name like `vod-watchfolder-firstname-lastname`. If you get an error that your bucket name already exists, try adding additional numbers or characters until you find an unused name.
 
@@ -37,7 +37,7 @@ Use the console or AWS CLI to create an Amazon S3 bucket. Keep in mind that your
     ![Create source bucket screenshot](../images/s3-create-watchfolder.png)
 
 
-### 2. Create an IAM Role for Your Lambda function
+### [2. Create an IAM Role for Your Lambda function](#vod-lambda-role)
 
 #### Background
 
@@ -155,7 +155,9 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 1. On the Configuration tab of the VODLambdaConvert page, in the  **function code** panel:  
 
     1. Select **Upload a file from Amazon S3** for the **Code entry type**
-    1. Enter the following for the URL: `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/lambda.zip`
+    1. Enter the following for the URL: `https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/lambda.zip`. 
+    
+        Note that this zip file is simply the [convert.py script](convert.py) and the [job JSON](job.json) file provided in this repo that you could zip up yourself, if desired.
 
     1. Enter `convert.handler` for the **Handler** field.
 
@@ -183,58 +185,58 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
     ```JSON
     {
-    "Records": [
-      {
-        "eventVersion": "2.0",
-        "eventTime": "2017-08-08T00:19:56.995Z",
-        "requestParameters": {
-          "sourceIPAddress": "54.240.197.233"
-        },
-        "s3": {
-          "configurationId":   "90bf2f16-1bdf-4de8-bc24-b4bb5cffd5b2",
-        "object": {
-        "eTag": "2fb17542d1a80a7cf3f7643da90cc6f4-18",
-            "key": "vodconsole/TRAILER.mp4",
-            "sequencer": "005989030743D59111",
-            "size": 143005084
-          },
-          "bucket": {
-            "ownerIdentity": {
-              "principalId": ""
-            },
-            "name": "rodeolabz-us-west-2",
-            "arn": "arn:aws:s3:::rodeolabz-us-west-2"
-          },
-          "s3SchemaVersion": "1.0"
-        },
-        "responseElements": {
-          "x-amz-id-2": "K5eJLBzGn/9NDdPu6u3c9NcwGKNklZyY5ArO9QmGa/t6VH2HfUHHhPuwz2zH1Lz4",
-          "x-amz-request-id": "E68D073BC46031E2"
-        },
-        "awsRegion": "us-west-2",
-        "eventName": "ObjectCreated:CompleteMultipartUpload",
-        "userIdentity": {
-          "principalId": ""
-        },
-        "eventSource": "aws:s3"
-      }
-    ]
+      "Records": [
+          {
+              "eventVersion": "2.0",
+              "eventTime": "2017-08-08T00:19:56.995Z",
+              "requestParameters": {
+                  "sourceIPAddress": "54.240.197.233"
+              },
+              "s3": {
+                  "configurationId": "90bf2f16-1bdf-4de8-bc24-b4bb5cffd5b2",
+                  "object": {
+                      "eTag": "2fb17542d1a80a7cf3f7643da90cc6f4-18",
+                      "key": "vodconsole/TRAILER.mp4",
+                      "sequencer": "005989030743D59111",
+                      "size": 143005084
+                  },
+                  "bucket": {
+                      "ownerIdentity": {
+                          "principalId": ""
+                      },
+                      "name": "rodeolabz-us-west-2",
+                      "arn": "arn:aws:s3:::rodeolabz-us-west-2"
+                  },
+                  "s3SchemaVersion": "1.0"
+              },
+              "responseElements": {
+                  "x-amz-id-2": "K5eJLBzGn/9NDdPu6u3c9NcwGKNklZyY5ArO9QmGa/t6VH2HfUHHhPuwz2zH1Lz4",
+                  "x-amz-request-id": "E68D073BC46031E2"
+              },
+              "awsRegion": "us-west-2",
+              "eventName": "ObjectCreated:CompleteMultipartUpload",
+              "userIdentity": {
+                  "principalId": ""
+              },
+              "eventSource": "aws:s3"
+          }
+      ]
     }
     ```
 1. Enter `ConvertTest` in the **Event name** box.
 1. Click on **Save** button. 
 1. Then back on the main page, click on **Test** button.
 1. Verify that the execution succeeded and that the function result looks like the following:
-```JSON
-{
-  "body": "{}",
-  "headers": {
-    "Access-Control-Allow-Origin": "*",
-    "Content-Type": "application/json"
-  },
-  "statusCode": 200
-}
-```
+    ```JSON
+    {
+    "body": "{}",
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json"
+    },
+    "statusCode": 200
+    }
+    ```
 
 ### 6. Create a S3 PutItem Event Trigger for your Convert lambda
 
