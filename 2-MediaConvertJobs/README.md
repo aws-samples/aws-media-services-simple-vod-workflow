@@ -116,17 +116,17 @@ At this point, we will test our job settings with just the MP4 output to make su
 
     ![HLS output settings](../images/mediaconvert-hls-settings.png)
 
-12. Scroll down to the **Stream settings** panel and enter `640` and `360` in the **Resolution (w x h)** box
+12. Scroll down to the **Encoding settings** panel and enter `640` and `360` in the **Resolution (w x h)** box
 13. Scroll down **Rate Control Mode** and set it to **QVBR**. Set **Max bitrate(bits/s)** box to `1000000`.
 14. Select Output 2 from the Output Groups section Jobs panel to go to the Output settings form for Output 2.
 15. Enter `_540` in the **Name modifier** box
 16. Enter `$dt$` in the **Segment modifier** box.
-17. Scroll down to the **Stream settings** panel and enter `960` and `540` in the **Resolution (w x h)** box
+17. Scroll down to the **Encoding settings** panel and enter `960` and `540` in the **Resolution (w x h)** box
 18. Scroll down **Rate Control Mode** and set it to **QVBR**. Set **Max bitrate(bits/s)** box to `2000000`.
 19. Select Output 3 from the Output Groups section Jobs panel to go to the Output settings form for Output 3.
 20. Enter `_720` in the **Name modifier** box
 21. Enter `$dt$` in the **Segment modifier** box.
-22. Scroll down to the **Stream settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
+22. Scroll down to the **Encoding settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
 23. Scroll down **Rate Control Mode** and set it to **QVBR**. Set **Max bitrate(bits/s)** box to `3000000`.
 
 
