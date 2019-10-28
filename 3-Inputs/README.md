@@ -40,9 +40,9 @@ Create duplicate of the job you created in module 2.  Modify the job to clip the
 1. Scroll down to the **Video selector** panel and select **Start at 0** from the **Timecode source** dropdown.
 
     ![Start at 0 image](../images/mediaconvert-start-0.png)
-1. Scroll down to the **Input clippings** panel and select **Add input clipping**.
-1. Enter `00:00:00:00` in the **Start timecode** box for **Input clipping 1**
-1. Enter `00:00:30:00` in the **End timecode** box for **Input clipping 1**
+1. Scroll down to the **Input clips** panel and select **Add input clip**.
+1. Enter `00:00:00:00` in the **Start timecode** box for **Input clip 1**
+1. Enter `00:00:30:00` in the **End timecode** box for **Input clip 1**
 
     ![input clipping image](../images/mediaconvert-clip.png)
 
