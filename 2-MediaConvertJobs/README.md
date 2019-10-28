@@ -35,7 +35,7 @@ In this module, you will create a MediaConvert job that take a single input vide
 
 **File Group - MP4** - this group produces a single MP4 file that must be downloaded entirely by the player for decoding and playback.  MP4 is a common _mezzanine_ (i.e. intermediate storage) format.  It  is also commonly used for video resources on the internet.
 
-**File Group - Thumbnails** -  this group produces JPEG images files, captured every few seconds, from the input video.  Thumbnail images can be used for presentaion of the video in websites or as input to downstream tasks such as analytics with AWS Rekognition. 
+**File Group - Thumbnails** -  this group produces JPEG images files, captured every few seconds, from the input video.  Thumbnail images can be used for presentaion of the video in websites or as input to downstream tasks such as analytics with Amazon Rekognition. 
 
 ### Detailed Instructions
 
