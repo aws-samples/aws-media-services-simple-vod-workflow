@@ -78,10 +78,10 @@ In order to facilitate https access from anonymous sources inside and outside th
 1. Select the **Use this bucket to host a website** box.
 1. Enter `index.html` in the **Index document** box.
 1. Select **Save**.
-
-`TODO! do we need to change the permissions or just update it so that we can make the bucket public`
-
 1. Select the **Permissions** tab.
+1. Under **Block public access**, click on the **Edit** button.
+1. Uncheck **Block all public access** and click the **Save** button.
+1. Type `confirm` in the textbox that pops up and click **Confirm**.
 1. Select **Bucket policy** and paste the following JSON into the bucket policy editor.
 1. Replace the text **YOUR-BUCKETNAME** with the name of the bucket you created earlier in this module.
 
