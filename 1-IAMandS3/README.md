@@ -36,7 +36,7 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
 
 1. From the AWS Management Console, click on **Services** and then select **IAM** in the Security, Identity & Compliance section.
 
-1. Select **Roles** in the left navigation bar and then choose **Create new role**.
+1. Select **Roles** in the left navigation bar and then choose **Create role**.
 
 1. Select **AWS Service** and **MediaConvert** for the role type, then click on the **Next:Permissions** button.
 
@@ -49,6 +49,8 @@ Use the IAM console to create a new role. Name it `vod-MediaConvertRole` and sel
 1. Enter `vod-MediaConvertRole` for the **Role name**.
 
 1. Choose **Create role**.
+
+1. Copy and save off the Role ARN of the role you just created using your favorite editor. You will be needing this in the subsequent modules.
 
 ## 2. Create an S3 bucket to store and host MediaConvert outputs
 
@@ -76,6 +78,9 @@ In order to facilitate https access from anonymous sources inside and outside th
 1. Select the **Use this bucket to host a website** box.
 1. Enter `index.html` in the **Index document** box.
 1. Select **Save**.
+
+`TODO! do we need to change the permissions or just update it so that we can make the bucket public`
+
 1. Select the **Permissions** tab.
 1. Select **Bucket policy** and paste the following JSON into the bucket policy editor.
 1. Replace the text **YOUR-BUCKETNAME** with the name of the bucket you created earlier in this module.

@@ -53,7 +53,6 @@ In this step you'll build the core function that will process the EDL and create
 1. Click on **Create function**.
 1. In the **Basic Information** section, enter `EDLMediaConvert` in the **Function name** field.
 1. Select **Python 3.7** for the **Runtime**.
-1. Choose **Use and existing role** from the Role dropdown.
 1. Expand the **Choose or create an execution role** section in the **Permissions** section. 
 1. Select **Use an existing role**. 
 1. Select `VODLambdaRole` from the **Existing Role** dropdown. This should be the same role that you created in an [earlier module](README.md#vod-lambda-role).
@@ -108,7 +107,7 @@ Now that the Lambda function has been created, and the S3 trigger has been put i
 
 1. Download the following video inputs and EDL file on to your local machine:
     * [llama_drama.mp4](https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/llama_drama.mp4)
-    * [ad_caribbean.mp4](https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/ad-caribbean.mp4)
+    * [ad_caribbean.mp4](https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/ad_caribbean.mp4)
     * [llama-ad-llama.edl](https://rodeolabz-us-west-2.s3-us-west-2.amazonaws.com/vodconsole/llama-ad-llama.edl)
 
 

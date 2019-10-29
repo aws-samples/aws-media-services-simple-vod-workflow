@@ -156,13 +156,6 @@ At this point, we will test our job settings with just the MP4 output to make su
 1. Select the **Audio 1** from the **Stream settings** side bar menu.  
 1. Select **Remove audio**.
 
-#### Job settings section
-
-1. Select **Settings** from the **Job settings** section of the Job panel to open the **Job settings** form.
-1. Select the role you created in the previous section of this lab from the **IAM** dropdown.
-
-    ![Job settings image](../images/mediaconvert-job-settings.png)
-
 #### Create the job
 
 1. Scroll to the bottom of the page and select **Create**
@@ -187,6 +180,7 @@ To play the videos, you will use the S3 HTTPS resource **Link** on the videos S3
 
 ![s3 link](../images/module-2-s3-link.png)
 
+Note that the `VANLIFE` clip only has audio in the first 45 seconds of the file. 
 
 #### MP4s
 

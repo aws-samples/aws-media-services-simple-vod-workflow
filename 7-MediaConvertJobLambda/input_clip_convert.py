@@ -51,7 +51,7 @@ def lambda_handler(event, context):
       "DeblockFilter": "DISABLED",
       "DenoiseFilter": "DISABLED",
       "TimecodeSource": "ZEROBASED",
-      "FileInput": "s3://odeolabz-us-west-2/reinvent2019/llama_drama.mp4",
+      "FileInput": "s3://rodeolabz-us-west-2/reinvent2019/llama_drama.mp4",
       "InputClippings": []
     }
     s3 = boto3.resource('s3')

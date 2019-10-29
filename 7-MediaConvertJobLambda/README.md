@@ -55,13 +55,17 @@ Use inline policies to grant permissions to other resources needed for the lambd
 
 1. From the AWS Management Console, click on **Services** and then select **IAM** in the Security, Identity & Compliance section.
 
-1. Select **Roles** in the left navigation bar and then choose **Create new role**.
+1. Select **Roles** in the left navigation bar and then choose **Create role**.
 
 1. Select **AWS Service** and **Lambda** for the role type, then click on the **Next:Permissions** button.
 
     **Note:** Selecting a role type automatically creates a trust policy for your role that allows AWS services to assume this role on your behalf. If you were creating this role using the CLI, AWS CloudFormation or another mechanism, you would specify a trust policy directly.
 
 1. Begin typing `AWSLambdaBasicExecutionRole` in the **Filter** text box and check the box next to that role.
+
+1. Delete what you entered in the **Filter** text box, and this time search for **S3FullAccess**. Check the box next to this role. 
+
+1. Choose **Next:Tags**.
 
 1. Choose **Next:Review**.
 
@@ -71,7 +75,7 @@ Use inline policies to grant permissions to other resources needed for the lambd
 
 1. Type `VODLambdaRole` into the filter box on the Roles page and choose the role you just created.
 
-1. On the Permissions tab, expand the **Add Inline Policies** section and choose the **JSON** tab.
+1. On the Permissions tab, click on the **Add Inline Policy** link and choose the **JSON** tab.
 
 1. Copy and paste the following JSON in the **Policy Document Box**.  You will need to edit this policy in the next step to fill in the resources for your application.
 
@@ -94,7 +98,7 @@ Use inline policies to grant permissions to other resources needed for the lambd
                 "iam:PassRole"
             ],
             "Resource": [
-                "<ARN for VODMediaConvertRole>"
+                "<ARN for vod-MediaConvertRole>"
             ],
             "Effect": "Allow",
             "Sid": "PassRole"
@@ -112,7 +116,7 @@ Use inline policies to grant permissions to other resources needed for the lambd
     ]
 }
 ```
-1. Replace <ARN for VODMediaConvertRole> tag in the policy with the ARN for the VODMMediaConvertRole you created earlier.
+1. Replace <ARN for vod-MediaConvertRole> tag in the policy with the ARN for the vod-MediaConvertRole you created earlier.
 2. Click on the **Review Policy** button.
 
 1. Enter `VODLambdaPolicy` in the **Policy Name** box.
@@ -137,14 +141,16 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
 1. Choose **Services** then select **Lambda** in the Compute section.
 
-1. Choose **Create a Lambda function**.
+1. Choose **Create function**.
 
 1. Choose the **Author from scratch** button.
 
 1. On the **Author from Scratch** panel, enter `VODLambdaConvert` in the **Name** field.
 2. Select **Python 3.7** for the **Runtime**.
 
-1. Choose **Use and existing role** from the Role dropdown.
+1. Expand the **Choose or create an execution role**.
+
+1. Select **Use an existing role**. 
 
 1. Select `VODLambdaRole` from the **Existing Role** dropdown.
 
@@ -166,7 +172,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 1. On the **Environment Variables** panel of the VODLambdaConvert page, enter the following keys and values:
 
     * DestinationBucket = vod-lastname (or whatever you named your bucket in module 1)
-    * MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/VODMediaConvertRole
+    * MediaConvertRole = arn:aws:iam::ACCOUNT NUMBER:role/vod-MediaConvertRole
     * Application = VOD
 
     ![Lambda function code screenshot](../images/lambda-environment.png)
@@ -177,9 +183,12 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
 ### Test the lambda
 
-1. From the main edit screen for your function, select **Actions** then **Configure test event**.
+1. From the main edit screen for your function, select **Test**.
 
     ![Configure test event](../images/configure-test-event.png)
+
+1. Enter `ConvertTest` in the **Event name** box.
+
 
 1. Copy and paste the following test event into the editor:
 
@@ -223,8 +232,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
       ]
     }
     ```
-1. Enter `ConvertTest` in the **Event name** box.
-1. Click on **Save** button. 
+1. Click on **Create** button. 
 1. Then back on the main page, click on **Test** button.
 1. Verify that the execution succeeded and that the function result looks like the following:
     ```JSON
@@ -269,7 +277,7 @@ You can use your own video or use the test.mp4 video included in this folder to 
 In the next module of this lab, we will setup automated monitoring of jobs created using the watchfolder workflow.  Until then, you can monitor the the MediaConvert console.  
 
 1. Open the S3 console overview page for the watchfolder S3 bucket you created earlier.
-1. Select **Upload** and then choose the file `test.mp4` from the directory for this lab module on your computer.
+1. Select **Upload** and then choose the file [test.mp4](test.mp4) from the directory for this lab module on your computer.
 1. Note the time that the upload completed.
 1. Open the MediaConvert jobs page and find a job for the input 'test.mp4' that was started near the time your upload completed.  
 
