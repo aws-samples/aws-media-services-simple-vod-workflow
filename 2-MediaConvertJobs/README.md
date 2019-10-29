@@ -67,7 +67,7 @@ In this module, you will create a MediaConvert job that take a single input vide
     ![MP4 output group](../images/mediaconvert-mp4-output-group.png)
 
 1. Select Output 1 from the File Output group in the Output Groups section of the Jobs panel to go to the Output settings form for Output 1.
-1. Scroll down to the **Stream settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
+1. Scroll down to the **Encoding settings** panel and enter `1280` and `720` in the **Resolution (w x h)** box
 1. Change the **Rate control mode** from CBR to **QVBR**.  
 1. Enter `3000000` for the **Max birate (bit/s)**.
 1. Leave all other settings for Output 1 as the default.
