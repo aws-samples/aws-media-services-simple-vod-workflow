@@ -68,7 +68,7 @@ The HLS output should be modified with timcodes.  The MP4 and Thumbnails outputs
 
 ### 3. Add a watermark to the MP4 output
 
-1. In the **Preprocessors** section of the Stream settings panel for Video 1 change the **Image inserter** switch to the on position.
+1. In the **Preprocessors** section of the Encoding settings panel for Video 1 change the **Image inserter** switch to the on position.
 1. Select **Add image**
 1. Enter `s3://rodeolabz-us-west-2/vodconsole/WATERMARK_wave.png` in the **Image location** box.
 1. Enter `0` in the **Layer** box.
