@@ -93,13 +93,14 @@ Once the Transcribe job is completed, we can process the JSON output to create t
 
 1. Select **Input 1** from the Input section of the MediaConvert menu side bar to open the **Input settings** form.
 1. Point your input to `s3://rodeolabz-us-west-2/vodconsole/MediaConvert_Explained.mp4`
-1. Under **Output Groups**, click on **File Group - MP4**.
-1. Update the **Destination** to `s3://<yourbucket>/assets/EMCEXPLAINED/MP4/`, replacing _yourbucket_ with your bucket.
 1. Scroll down to the **Captions selectors** panel and click on the **Add caption selector** button.
 1. Select **SRT** from the **Source** dropdown for Caption Selector 1.  
 1. Enter the link to the SRT file you created `s3://<yourbucket>/CAPTIONS_en.srt` in the **Source file** box. Replace _yourbucket_ with name of your bucket.
 
     ![alt](../images/input-captions-settings.png)
+
+1. Under **Output Groups**, click on **File Group - MP4**.
+1. Update the **Destination** to `s3://<yourbucket>/assets/EMCEXPLAINED/MP4/`, replacing _yourbucket_ with your bucket.
 
 1. Select **Output 1** of the **MP4 - File Group** in  the Output Groups section of the MediaConvert menu side bar to open the **Output settings** form for Output 1.
 1. Select **Add captions** from the top of the **Encoding settings** panel.

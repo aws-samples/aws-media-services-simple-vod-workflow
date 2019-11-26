@@ -101,6 +101,7 @@ You will now create a notification rule that matches MediaConvert COMPLETE event
     ![alt](../images/emp-vod-cw-event-rule.png)
 1. Click on **Configure details**.
 1. Give the Rule definition a name like `MediaPackageCreateAsset`.
+1. Click on **Create rule**.
 
 
 ### Run a MediaConvert Job with HLS Output
