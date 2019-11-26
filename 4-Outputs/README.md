@@ -37,7 +37,7 @@ You will burn in a timecode and a tag that indicates which video from the HLS ou
 
 1. Select **Output 1** from the **Apple HLS Group ** of the Output Groups section of the MediaConvert menu side bar to open the **Output settings** form for Output 1.
 
-1. Scroll down to the **Stream Settings** panel and select **Video 1** from the side bar.
+1. Scroll down to the **Encoding Settings** panel and select **Video 1** from the side bar.
 1. Expand the **Preprocessors** carrot and change the **Timecode burn-in** switch to the on position.
 1. Select **Small (16)** from the **Font size** drop down.
 1. Enter `640x360_` plus your name or some other message, such as an ASCII art monkey `@('_')@`, in the **Prefix** box
@@ -68,7 +68,7 @@ The HLS output should be modified with timcodes.  The MP4 and Thumbnails outputs
 
 ### 3. Add a watermark to the MP4 output
 
-1. In the **Preprocessors** section of the Stream settings panel for Video 1 change the **Image inserter** switch to the on position.
+1. In the **Preprocessors** section of the Encoding settings panel for Video 1 change the **Image inserter** switch to the on position.
 1. Select **Add image**
 1. Enter `s3://rodeolabz-us-west-2/vodconsole/WATERMARK_wave.png` in the **Image location** box.
 1. Enter `0` in the **Layer** box.

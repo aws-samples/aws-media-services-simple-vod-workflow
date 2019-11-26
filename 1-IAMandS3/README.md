@@ -26,7 +26,7 @@ Otherwise, continue to the next section.
 
 ## 1. Create an IAM Role to Use with AWS Elemental MediaConvert
 
-MediaConvert will will need to be granted permissions to read and write files from your S3 buckets and generate CloudWatch events as it processes videos.  MediaConvert is granted the permissions it needs by assuming a role that is passed to it when you create a job.
+MediaConvert will need to be granted permissions to read and write files from your S3 buckets and generate CloudWatch events as it processes videos.  MediaConvert is granted the permissions it needs by assuming a role that is passed to it when you create a job.
 
 #### High-Level Instructions
 
