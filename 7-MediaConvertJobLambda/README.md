@@ -63,7 +63,7 @@ Use inline policies to grant permissions to other resources needed for the lambd
 
 1. Begin typing `AWSLambdaBasicExecutionRole` in the **Filter** text box and check the box next to that role.
 
-1. Delete what you entered in the **Filter** text box, and this time search for **S3FullAccess**. Check the box next to this role. 
+1. Delete what you entered in the **Filter** text box, and this time search for **AmazonS3FullAccess**. Check the box next to this role. 
 
 1. Choose **Next:Tags**.
 
@@ -145,7 +145,7 @@ Make sure to configure your function to use the `VODLambdaRole` IAM role you cre
 
 1. Choose the **Author from scratch** button.
 
-1. On the **Author from Scratch** panel, enter `VODLambdaConvert` in the **Name** field.
+1. On the **Author from Scratch** panel, enter `VODLambdaConvert` in the **Function name** field.
 2. Select **Python 3.7** for the **Runtime**.
 
 1. Expand the **Choose or create an execution role**.

@@ -100,7 +100,7 @@ In order to facilitate https access from anonymous sources inside and outside th
     }
     ```
 1. Click on **Save**
-1. Next, click on **CORS configruation** and enter the following XML into the **CORS configuration editor**.
+1. Next, click on **CORS configuration** and enter the following XML into the **CORS configuration editor**.
     ```
     <?xml version="1.0" encoding="UTF-8"?>
     <CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
