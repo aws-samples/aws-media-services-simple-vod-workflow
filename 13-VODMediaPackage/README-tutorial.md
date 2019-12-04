@@ -11,7 +11,7 @@ In this tutorial, we walk you through ingesting an HLS asset you have transcoded
 ### Give MediaPackage access to S3
 You want to give MediaPackage access to the S3 bucket MediaConvert has been using to write outputs.
 
-1. Follow the instructions here https://docs.aws.amazon.com/mediapackage/latest/ug/setting-up-create-trust-rel.html.  
+1. Follow the instructions here carefully: https://docs.aws.amazon.com/mediapackage/latest/ug/setting-up-create-trust-rel.html. At the last section, make sure that your trusted service is **mediapackage.amazonaws.com** as shown in the JSON policy document. 
 1. Note the MediaPackage role name you created.
 
 ### Create a Packaging Group
