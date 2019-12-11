@@ -217,4 +217,4 @@ Next module: [**Modifying AWS Elemental MediaConvert Inputs**](../3-Inputs/READM
 
 You may also be interested in the following activities:
 
-* [Testing HLS Video](../9-TestingHLS/README.md)
+* [Testing HLS Video](../10-TestingHLS/README.md)
