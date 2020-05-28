@@ -17,7 +17,7 @@ lambda-uploader==1.2.0
 pyasn1==0.4.2
 Pygments==2.2.0
 python-dateutil==2.6.1
-PyYAML==3.12
+PyYAML==5.1
 requests==2.18.4
 requests-aws4auth==0.9
 rsa==3.4.2
