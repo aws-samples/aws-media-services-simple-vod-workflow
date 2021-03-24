@@ -20,7 +20,7 @@ python-dateutil==2.6.1
 PyYAML==5.1
 requests==2.20.0
 requests-aws4auth==0.9
-rsa==3.4.2
+rsa==4.1
 s3transfer==0.1.13
 six==1.11.0
 timecode==1.2.0
