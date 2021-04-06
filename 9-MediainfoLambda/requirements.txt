@@ -15,7 +15,7 @@ idna==2.6
 jmespath==0.9.3
 lambda-uploader==1.2.0
 pyasn1==0.4.2
-Pygments==2.2.0
+Pygments==2.7.4
 python-dateutil==2.6.1
 PyYAML==5.4
 requests==2.20.0
