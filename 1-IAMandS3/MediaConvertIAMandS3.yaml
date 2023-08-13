@@ -81,6 +81,11 @@ Resources:
         - Id: ExpireRule
           Status: Enabled
           ExpirationInDays: '7'
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
     DeletionPolicy: Retain
     Type: "AWS::S3::Bucket"
 
