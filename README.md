@@ -1,3 +1,5 @@
+# This project has been archived.  
+
 # AWS Video On Demand with MediaConvert Workshop
 
 This workshop takes you through development of a video on demand (VOD)workflow using an encoder in the cloud to convert video content stored in Amazon S3 into new formats for storage, reuse and delivery. We will explore encoding video in different codecs and package formats, quality levels and output sizes for file based and streaming delivery.  We will also look at how you can modify videos using clipping and stitching, add captions, detect Ads in input videos and burn in information to video to help with providing additional information about the video on playout.  
